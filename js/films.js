@@ -42,6 +42,16 @@ export const FILMS = [
     line: 'A white rabbit walks into a 24-hour store. Three stomps, and the whole place tips upside down.',
   },
   {
+    id: '008',
+    title: 'The Star Keeper',
+    time: '00:00',
+    place: 'Celestial clock',
+    dur: '00:32',
+    src: 'media/films/008-the-star-keeper.mp4',
+    wide: true,
+    line: 'A gecko in a spacesuit gets the clock running again. Then the second hand takes off with him on it.',
+  },
+  {
     id: '004',
     title: 'Spotter',
     time: '18:52',
@@ -79,15 +89,5 @@ export const FILMS = [
     src: 'media/films/007-skyveil.mp4',
     wide: true,
     line: 'Two minutes to midnight at the academy. A wizard, a brawler and an elf, against something that should have stayed in chains.',
-  },
-  {
-    id: '008',
-    title: 'The Star Keeper',
-    time: '00:00',
-    place: 'Celestial clock',
-    dur: '00:32',
-    src: 'media/films/008-the-star-keeper.mp4',
-    wide: true,
-    line: 'A gecko in a spacesuit gets the clock running again. Then the second hand takes off with him on it.',
   },
 ];
