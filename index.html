@@ -1,327 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>COROX Films</title>
-<meta name="description" content="COROX — short films about the city's other residents.">
-<meta name="color-scheme" content="dark">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-:root{
-  --ink:#09090a; --bone:#e7e3d8; --dim:rgba(231,227,216,.56); --faint:rgba(231,227,216,.2); --line:rgba(231,227,216,.14);
-  --display:"Jost",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
-  --vh:100vh;
-}
-@supports (height:100svh){:root{--vh:100svh}}
-/* A night film label: dark in both schemes on purpose. */
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ink:#09090a}}
-:root[data-theme="dark"]{--ink:#09090a}
-*{box-sizing:border-box;margin:0;padding:0}
-html{background:var(--ink);-webkit-text-size-adjust:100%}
-body{background:var(--ink);color:var(--bone);font-family:var(--display);overflow-x:hidden;-webkit-font-smoothing:antialiased}
-img,video,svg{display:block}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-::selection{background:var(--bone);color:#000}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COROX Films</title>
+  <meta name="description" content="COROX — short films about the other residents.">
+  <meta name="color-scheme" content="dark">
 
-#grain{position:fixed;inset:-10%;pointer-events:none;z-index:90;opacity:.08;mix-blend-mode:screen;background-size:128px 128px}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
 
-/* header */
-.top{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;padding:16px clamp(16px,3vw,32px);mix-blend-mode:difference;color:#fff}
-.top img{height:40px;width:auto;margin:-12px -10px}
-.top nav{margin-left:auto;display:flex;gap:22px}
-.top nav button{font:400 11px/1 var(--mono);letter-spacing:.18em;opacity:.8}
-.top nav button:hover{opacity:1;text-decoration:underline;text-underline-offset:4px}
-
-/* shared scene: sticky stage, footage revealed through a slit */
-.scene{position:relative}
-.stick{position:sticky;top:0;height:var(--vh);overflow:hidden}
-.reveal{position:absolute;inset:0;clip-path:inset(50% 50% 50% 50%);will-change:clip-path;background:#000}
-.reveal video{width:100%;height:100%;object-fit:cover}
-.reveal::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),transparent 30%,transparent 55%,rgba(0,0,0,.75))}
-.kicker{position:absolute;left:0;right:0;text-align:center;font:400 11px/1.5 var(--mono);letter-spacing:.32em;color:var(--dim);text-transform:uppercase;padding:0 16px}
-.hint{position:absolute;left:0;right:0;bottom:28px;text-align:center;font:400 10px/1 var(--mono);letter-spacing:.3em;color:var(--dim)}
-.hint span{display:inline-block;animation:nudge 1.6s ease-in-out infinite}
-@keyframes nudge{50%{transform:translateY(6px)}}
-.cap{position:absolute;left:clamp(16px,5vw,64px);right:clamp(16px,5vw,64px);bottom:clamp(40px,10vh,110px);opacity:0;transform:translateY(30px)}
-.cap h1,.cap h3{font:800 clamp(40px,9vw,140px)/.9 var(--display);letter-spacing:-.02em;text-transform:uppercase}
-.cap .meta{font:400 11px/1.5 var(--mono);letter-spacing:.24em;color:var(--dim);text-transform:uppercase;margin-bottom:14px}
-.cap p{margin-top:18px;font:400 clamp(15px,1.6vw,20px)/1.5 var(--display);max-width:34em}
-.btn{margin-top:24px;display:inline-flex;align-items:center;gap:12px;padding:14px 20px 14px 16px;border-radius:999px;background:var(--bone);color:#000;font:600 12px/1 var(--mono);letter-spacing:.18em;transition:transform .2s}
-.btn:hover{transform:translateY(-2px)}
-.btn i{width:0;height:0;border-left:9px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent}
-
-/* act 1: the logo */
-.door{height:calc(var(--vh)*3.2)}
-.logo-wrap{position:absolute;left:50%;top:50%;width:min(94vw,1240px);aspect-ratio:2.5;transform:translate(-50%,-52%)}
-.lg{position:absolute;inset:0;width:100%;height:100%;will-change:transform,opacity;user-select:none;-webkit-user-drag:none}
-.lg-coro{clip-path:polygon(0 0,75.3% 0,75.3% 26%,77.3% 33.3%,78% 36.7%,79.3% 41.7%,79.7% 48.3%,80.3% 55%,80% 58.3%,78.7% 63.3%,77% 68.3%,75.7% 71.7%,75.3% 76%,75.3% 100%,0 100%)}
-.lg-xt{clip-path:polygon(75.3% 0,100% 0,100% 48.3%,79.7% 48.3%,79.3% 41.7%,78% 36.7%,77.3% 33.3%,75.3% 26%)}
-.lg-xb{clip-path:polygon(79.7% 48.3%,100% 48.3%,100% 100%,75.3% 100%,75.3% 76%,75.7% 71.7%,77% 68.3%,78.7% 63.3%,80% 58.3%,80.3% 55%)}
-.door .kicker{top:calc(50% - min(94vw,1240px)*.2 - 40px)}
-
-/* film acts: the title splits the same way */
-.act{height:calc(var(--vh)*2.8)}
-.ttl{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:120px;white-space:nowrap}
-.ttl h2{font:800 1em/.82 var(--display);letter-spacing:-.02em;text-transform:uppercase;color:var(--bone);will-change:transform,opacity;padding:.04em 0}
-.ttl .tp{clip-path:inset(0 0 50% 0)}
-.ttl .bt{position:absolute;inset:0;clip-path:inset(50% 0 0 0)}
-.act .kicker{top:calc(50% - var(--th,120px)*.5 - 48px)}
-
-/* index */
-.index{padding:clamp(90px,14vh,160px) clamp(16px,3vw,48px) clamp(60px,10vh,120px);background:var(--ink)}
-.index h2{font:800 clamp(44px,8vw,128px)/.88 var(--display);letter-spacing:-.02em;text-transform:uppercase;margin-bottom:clamp(28px,5vh,56px)}
-.rows{border-top:1px solid var(--line)}
-.row{position:relative;display:grid;grid-template-columns:80px minmax(0,1fr) 260px 70px 40px;align-items:center;gap:16px;width:100%;text-align:left;padding:clamp(18px,3vh,28px) 0;border-bottom:1px solid var(--line);overflow:hidden}
-.row::before{content:"";position:absolute;inset:0;background:var(--bone);transform:scaleY(0);transform-origin:bottom;transition:transform .45s cubic-bezier(.7,0,.2,1)}
-.row>*{position:relative;transition:color .3s}
-.row:hover::before,.row:focus-visible::before{transform:scaleY(1)}
-.row:hover>*,.row:focus-visible>*{color:#000}
-.row:focus-visible{outline:none}
-.row .id{font:600 12px/1 var(--mono);letter-spacing:.2em;color:var(--dim)}
-.row .tt{font:800 clamp(28px,5vw,76px)/1 var(--display);letter-spacing:-.01em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row .pl,.row .du{font:400 11px/1.4 var(--mono);letter-spacing:.14em;color:var(--dim)}
-.row .go{width:36px;height:36px;border-radius:50%;border:1px solid currentColor;display:grid;place-items:center}
-.row .go i{width:0;height:0;border-left:8px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px}
-@media (max-width:900px){.row{grid-template-columns:44px minmax(0,1fr) auto;gap:10px}.row .pl,.row .go{display:none}}
-#peek{position:fixed;left:0;top:0;width:190px;aspect-ratio:9/16;border-radius:12px;overflow:hidden;pointer-events:none;z-index:70;opacity:0;transition:opacity .25s;box-shadow:0 30px 80px rgba(0,0,0,.6)}
-#peek video{width:100%;height:100%;object-fit:cover}
-#peek.on{opacity:1}
-
-/* footer */
-footer{min-height:calc(var(--vh)*.8);display:grid;align-content:center;justify-items:center;text-align:center;padding:80px 16px 40px;background:#000}
-.flogo{width:min(80vw,640px);aspect-ratio:2.5}
-.flogo img{width:100%;height:100%}
-footer p{margin-top:6px;font:400 11px/1.6 var(--mono);letter-spacing:.3em;color:var(--dim)}
-footer .copy{margin-top:48px;font-size:10px;color:var(--faint)}
-.bird{position:fixed;left:0;top:0;z-index:85;pointer-events:none;width:44px;height:20px}
-.bird path{fill:none;stroke:#e7e3d8;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.bird .w{transform-origin:22px 10px;animation:flap .32s ease-in-out infinite alternate}
-@keyframes flap{to{transform:scaleY(-.55)}}
-
-/* player */
-#theater{position:fixed;inset:0;z-index:92;background:rgba(0,0,0,.95);display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity .35s}
-#theater.on{opacity:1;pointer-events:auto}
-.th-box{position:relative;height:min(88vh,calc(100vw*16/9 - 40px));aspect-ratio:9/16;border-radius:16px;overflow:hidden;background:#000;box-shadow:0 0 0 1px var(--line)}
-.th-box video{width:100%;height:100%;object-fit:cover}
-.th-box.wide{height:auto;width:min(calc(100vw - 150px),calc(86vh*16/9));aspect-ratio:16/9}
-.th-side{z-index:2}
-@media (max-width:700px){.th-box.wide{width:calc(100vw - 24px)}}
-#peek.wide{width:320px;aspect-ratio:16/9}
-@media (orientation:portrait){.act.wide .reveal video{object-fit:contain}}
-.th-bar{position:absolute;left:0;right:0;bottom:0;padding:40px 14px 14px;background:linear-gradient(transparent,rgba(0,0,0,.8));display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:12px;font:400 10px/1 var(--mono);letter-spacing:.12em}
-.th-bar button{width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.4);display:grid;place-items:center;font:600 10px/1 var(--mono)}
-.th-prog{height:22px;display:flex;align-items:center;cursor:pointer;touch-action:none}
-.th-prog div{height:3px;width:100%;background:rgba(255,255,255,.25);border-radius:2px;position:relative}
-.th-prog span{position:absolute;left:0;top:0;bottom:0;background:var(--bone);border-radius:2px}
-.th-side{position:fixed;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font:400 22px/1 var(--display);background:rgba(0,0,0,.4)}
-.th-prev{left:clamp(8px,4vw,60px)}.th-next{right:clamp(8px,4vw,60px)}
-.th-close{position:fixed;top:16px;right:clamp(16px,3vw,32px);font:600 11px/1 var(--mono);letter-spacing:.2em;padding:12px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(0,0,0,.5)}
-.th-title{position:fixed;left:clamp(16px,3vw,32px);top:16px;font:400 11px/1.6 var(--mono);letter-spacing:.2em;color:var(--dim);text-transform:uppercase}
-.th-title strong{display:block;font:800 24px/1.1 var(--display);color:var(--bone);letter-spacing:0}
-.th-note{position:absolute;left:0;right:0;top:16px;text-align:center;font:400 9px/1 var(--mono);letter-spacing:.18em;color:var(--dim)}
-@media (max-width:700px){.th-title{display:none}.th-side{top:auto;bottom:16px;transform:none}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important}}
-</style>
+  <script type="module" src="js/main.js"></script>
 </head>
 <body>
-<div id="grain" aria-hidden="true"></div>
+  <div id="grain" aria-hidden="true"></div>
 
-<header class="top">
-  <img src="media/logo.png" alt="COROX">
-  <nav><button data-go="act-001">FILMS</button><button data-go="index">INDEX</button></nav>
-</header>
+  <!-- Header -->
+  <header class="top">
+    <img src="media/logo.png" alt="COROX">
+    <nav>
+      <button data-go="act-001">FILMS</button>
+      <button data-go="index">INDEX</button>
+    </nav>
+  </header>
 
-<main id="main">
-  <!-- Act 1: the X of the logo opens -->
-  <section class="scene door" id="door">
-    <div class="stick">
-      <div class="reveal"><video src="media/f004.mp4" muted loop playsinline autoplay preload="auto"></video></div>
-      <p class="kicker">Short films about the other residents</p>
-      <div class="logo-wrap" role="img" aria-label="COROX">
-        <img class="lg lg-coro" src="media/logo.png" alt="">
-        <img class="lg lg-xt" src="media/logo.png" alt="">
-        <img class="lg lg-xb" src="media/logo.png" alt="">
+  <main id="main">
+    <!-- Act 1: the X of the logo splits open on real footage -->
+    <section class="scene door" id="door">
+      <div class="stick">
+        <div class="reveal">
+          <video src="media/films/003-bass-gravity.mp4" muted loop playsinline autoplay preload="auto"></video>
+        </div>
+        <p class="kicker">Short films about the other residents</p>
+        <div class="logo-wrap" role="img" aria-label="COROX">
+          <img class="lg lg-coro" src="media/logo.png" alt="">
+          <img class="lg lg-xt" src="media/logo.png" alt="">
+          <img class="lg lg-xb" src="media/logo.png" alt="">
+        </div>
+        <div class="hint">SCROLL <span>↓</span></div>
+        <div class="cap">
+          <h1>The city is<br>never empty.</h1>
+          <p>A crow, a cat, a rabbit, an owl, a kid with a board. They ride scooters, race the last train, wreck the 24-hour store, split arrows, wait for one more wave. Nobody notices. We do.</p>
+        </div>
       </div>
-      <div class="hint">SCROLL <span>↓</span></div>
-      <div class="cap">
-        <h1>The city is<br>never empty.</h1>
-        <p>A crow, a cat, a rabbit, an owl, a kid with a board. They ride scooters, race the last train, wreck the 24-hour store, split arrows, wait for one more wave. Nobody notices. We do.</p>
-      </div>
-    </div>
+    </section>
+
+    <!-- Film acts are added here by js/main.js from js/films.js -->
+  </main>
+
+  <!-- Index -->
+  <section class="index" id="index">
+    <h2>Index</h2>
+    <div class="rows" id="rows"></div>
   </section>
-  <!-- film acts are generated below from FILMS -->
-</main>
 
-<section class="index" id="index">
-  <h2>Index</h2>
-  <div class="rows" id="rows"></div>
-</section>
+  <!-- Footer: click the logo to release the crows -->
+  <footer>
+    <button class="flogo" id="flogo" aria-label="COROX"><img src="media/logo.png" alt="COROX"></button>
+    <p>MORE FILES SOON</p>
+    <p class="copy">© 2026 COROX</p>
+  </footer>
 
-<footer>
-  <button class="flogo" id="flogo" aria-label="COROX"><img src="media/logo.png" alt="COROX"></button>
-  <p>MORE FILES SOON</p>
-  <p class="copy">© 2026 COROX</p>
-</footer>
+  <!-- Hover preview for index rows -->
+  <div id="peek"><video muted loop playsinline preload="none"></video></div>
 
-<div id="peek"><video muted loop playsinline preload="none"></video></div>
-
-<div id="theater" role="dialog" aria-modal="true" aria-label="Film player">
-  <div class="th-title" id="thTitle"></div>
-  <button class="th-close" id="thClose">CLOSE ✕</button>
-  <button class="th-side th-prev" id="thPrev" aria-label="Previous film">‹</button>
-  <div class="th-box">
-    <video id="thV" playsinline preload="auto"></video>
-    <div class="th-note" id="thNote"></div>
-    <div class="th-bar">
-      <button id="thPlay" aria-label="Play or pause">❚❚</button>
-      <div class="th-prog" id="thProg"><div><span id="thFill"></span></div></div>
-      <span id="thTime">00:00 / 00:00</span>
-      <button id="thMute" aria-label="Mute">SND</button>
+  <!-- Player -->
+  <div id="theater" role="dialog" aria-modal="true" aria-label="Film player">
+    <div class="th-title" id="thTitle"></div>
+    <button class="th-close" id="thClose">CLOSE ✕</button>
+    <button class="th-side th-prev" id="thPrev" aria-label="Previous film">‹</button>
+    <div class="th-box">
+      <video id="thV" playsinline preload="auto"></video>
+      <div class="th-bar">
+        <button id="thPlay" aria-label="Play or pause">❚❚</button>
+        <div class="th-prog" id="thProg"><div><span id="thFill"></span></div></div>
+        <span id="thTime">00:00 / 00:00</span>
+        <button id="thMute" aria-label="Mute">SND</button>
+      </div>
     </div>
+    <button class="th-side th-next" id="thNext" aria-label="Next film">›</button>
   </div>
-  <button class="th-side th-next" id="thNext" aria-label="Next film">›</button>
-</div>
-
-<script>
-(()=>{
-const $=(s,e=document)=>e.querySelector(s), $$=(s,e=document)=>[...e.querySelectorAll(s)];
-const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v)), lerp=(a,b,t)=>a+(b-a)*t;
-const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
-const pad=n=>String(n).padStart(2,'0'), mmss=s=>pad(Math.floor(s/60))+':'+pad(Math.floor(s%60));
-const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const FINE=matchMedia('(hover:hover) and (pointer:fine)').matches;
-
-const FILMS=[
- {id:'001',title:'3 A.M.',time:'03:00',place:'Taipei',dur:'00:18',src:'media/f001.mp4',
-  ln:'A crow who became a man and forgot how to fly. Convenience store, scooter, rooftop. We kept our distance and filmed.'},
- {id:'002',title:'Night Ride',time:'23:47',place:'Tokyo',dur:'00:24',src:'media/f003.mp4',
-  ln:'Red cap, white tee, black fixed-gear. Every night at 23:47 he races the last train.'},
- {id:'003',title:'Bass Gravity',time:'03:07',place:'24-hour store',dur:'00:34',src:'media/f004.mp4',
-  ln:'A white rabbit walks into a 24-hour store. Three stomps, and the whole place tips upside down.'},
- {id:'004',title:'Spotter',time:'18:52',place:'Outback',dur:'00:30',src:'media/f005.mp4',wide:true,
-  ln:'A small owl, a bow three times his size, a kangaroo who will not stop smirking. Then someone else picks up the bow.'},
- {id:'005',title:'One More Wave',time:'05:40',place:'Open sea',dur:'00:30',src:'media/f006.mp4',wide:true,
-  ln:'Storm clouds, cold water, a kid who will not paddle in. He waits for the last one.'}
-];
-
-/* build the film acts */
-const main=$('#main');
-FILMS.forEach((f,i)=>{const s=document.createElement('section');s.className='scene act'+(f.wide?' wide':'');s.id='act-'+f.id;
-  s.innerHTML=`<div class="stick">
-    <div class="reveal"><video muted loop playsinline preload="none" data-src="${f.src}"></video></div>
-    <p class="kicker">File ${f.id} · ${f.time} · ${f.place}</p>
-    <div class="ttl"><h2 class="tp">${f.title}</h2><h2 class="bt" aria-hidden="true">${f.title}</h2></div>
-    <div class="hint">SCROLL <span>↓</span></div>
-    <div class="cap"><div class="meta">File ${f.id} · ${f.time} · ${f.place} · ${f.dur}</div><h3>${f.title}</h3><p>${f.ln}</p>
-      <button class="btn" data-i="${i}"><i></i>WATCH WITH SOUND</button></div></div>`;
-  main.appendChild(s)});
-$$('.cap .btn').forEach(b=>b.addEventListener('click',()=>openTheater(+b.dataset.i)));
-
-/* fit each title to the width */
-function fit(){$$('.ttl').forEach(t=>{t.style.fontSize='100px';const w=t.scrollWidth;const fs=Math.min(260,100*innerWidth*.9/w);t.style.fontSize=fs+'px';
-  t.closest('.stick').style.setProperty('--th',(fs*.9)+'px')})}
-fit();document.fonts&&document.fonts.ready.then(fit);addEventListener('resize',fit,{passive:true});
-
-/* scenes: one engine for the logo act and every film act */
-const scenes=$$('.scene').map(sec=>{const st=$('.stick',sec);
-  const isDoor=sec.id==='door';
-  return {sec,isDoor,reveal:$('.reveal',st),vid:$('video',st),kick:$('.kicker',st),hint:$('.hint',st),cap:$('.cap',st),
-    anchor:isDoor?$('.logo-wrap',st):$('.ttl',st),
-    a:isDoor?$('.lg-xt',st):$('.tp',st), b:isDoor?$('.lg-xb',st):$('.bt',st), c:isDoor?$('.lg-coro',st):null}});
-function upd(sc,now){
-  const r=sc.sec.getBoundingClientRect(),vh=innerHeight,vw=innerWidth;
-  if(r.bottom<0||r.top>vh)return;
-  const p=clamp(-r.top/(r.height-vh));
-  const idle=RM?0:(Math.sin(now/700)*.5+.5)*.012;
-  const e1=ease(clamp((p-.03)/.34)), e2=ease(clamp((p-.3)/.36)), e3=ease(clamp((p-.62)/.18));
-  const sep=(e1*.3+idle)*vh;
-  if(sc.isDoor){
-    sc.a.style.transform=`translate3d(${e1*2}vw,${-sep}px,0) rotate(${-e1*6}deg)`;
-    sc.b.style.transform=`translate3d(${e1*2}vw,${sep}px,0) rotate(${e1*6}deg)`;
-    sc.c.style.transform=`translate3d(${-e1*14}vw,0,0)`;sc.c.style.opacity=1-e1*1.1;
-  }else{
-    sc.a.style.transform=`translate3d(${-e1*3}vw,${-sep}px,0)`;
-    sc.b.style.transform=`translate3d(${e1*3}vw,${sep}px,0)`;
-  }
-  sc.a.style.opacity=sc.b.style.opacity=1-e2*1.2;
-  sc.kick.style.opacity=sc.hint.style.opacity=1-e1*2;
-  const w=sc.anchor.getBoundingClientRect();
-  const xc=sc.isDoor?w.left+w.width*.857:w.left+w.width/2, yc=sc.isDoor?w.top+w.height*.483:w.top+w.height/2;
-  const hw=sc.isDoor?w.width*.085:w.width*.5, half=sep*.92;
-  const L=lerp(xc-hw,0,e2),R=lerp(xc+hw,vw,e2),T=lerp(yc-half,0,e2),B=lerp(yc+half,vh,e2);
-  sc.reveal.style.clipPath=`inset(${T}px ${vw-R}px ${vh-B}px ${L}px round ${lerp(6,0,e2)}px)`;
-  sc.cap.style.opacity=e3;sc.cap.style.transform=`translateY(${(1-e3)*30}px)`;sc.cap.style.pointerEvents=e3>.5?'auto':'none';
-}
-/* load and play footage only near the screen */
-const io=new IntersectionObserver(es=>es.forEach(e=>{const v=$('.reveal video',e.target);
-  if(e.isIntersecting){if(!v.src&&v.dataset.src)v.src=v.dataset.src;if(!$('#theater').classList.contains('on'))v.play().catch(()=>{})}else v.pause()}),{rootMargin:'50% 0px'});
-scenes.forEach(s=>io.observe(s.sec));
-function resumeVisible(){if($('#theater').classList.contains('on'))return;
-  scenes.forEach(s=>{const r=s.sec.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0&&s.vid.src&&s.vid.paused)s.vid.play().catch(()=>{})})}
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)resumeVisible()});
-
-/* nav */
-$$('[data-go]').forEach(b=>b.addEventListener('click',()=>{const el=document.getElementById(b.dataset.go);scrollTo({top:el.offsetTop,behavior:RM?'auto':'smooth'})}));
-
-/* grain */
-const gEl=$('#grain'),gT=[];
-{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');
- for(let k=0;k<6;k++){const im=x.createImageData(128,128),d=im.data;for(let i=0;i<d.length;i+=4){const v=Math.random()<.5?0:Math.random()*255|0;d[i]=d[i+1]=d[i+2]=v;d[i+3]=255}x.putImageData(im,0,0);gT.push(`url(${c.toDataURL()})`)}}
-let gk=0;const grain=()=>{gk=(gk+1)%gT.length;gEl.style.backgroundImage=gT[gk];gEl.style.backgroundPosition=`${Math.random()*128|0}px ${Math.random()*128|0}px`};grain();
-
-/* index */
-const rows=$('#rows');
-rows.innerHTML=FILMS.map((f,i)=>`<button class="row" data-i="${i}"><span class="id">${f.id}</span><span class="tt">${f.title}</span>
-  <span class="pl">${f.time} · ${f.place.toUpperCase()}</span><span class="du">${f.dur}</span><span class="go"><i></i></span></button>`).join('');
-const peek=$('#peek'),pv=$('video',peek);let mx=0,my=0,px=0,py=0;
-addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY},{passive:true});
-$$('.row').forEach(r=>{r.addEventListener('click',()=>openTheater(+r.dataset.i));
-  if(FINE){r.addEventListener('pointerenter',()=>{const f=FILMS[+r.dataset.i];if(pv.dataset.src!==f.src){pv.src=f.src;pv.dataset.src=f.src}peek.classList.toggle('wide',!!f.wide);pv.play().catch(()=>{});peek.classList.add('on')});
-  r.addEventListener('pointerleave',()=>{peek.classList.remove('on');pv.pause()})}});
-
-/* player */
-const th=$('#theater'),thV=$('#thV');let thI=0;
-function openTheater(i){thI=(i+FILMS.length)%FILMS.length;const f=FILMS[thI];
-  $('.th-box').classList.toggle('wide',!!f.wide);thV.src=f.src;thV.muted=false;thV.play().catch(()=>{thV.muted=true;thV.play().catch(()=>{})});
-  $('#thTitle').innerHTML=`<strong>${f.title}</strong>File ${f.id} · ${f.time} · ${f.place}`;
-  $('#thNote').textContent=f.silent?'NO SOUND ON THIS CUT':'';
-  th.classList.add('on');document.body.style.overflow='hidden';$$('.reveal video').forEach(v=>v.pause());updMute()}
-function closeTheater(){th.classList.remove('on');thV.pause();document.body.style.overflow='';resumeVisible()}
-function updMute(){$('#thMute').textContent=thV.muted?'MUTE':'SND'}
-$('#thClose').onclick=closeTheater;$('#thPrev').onclick=()=>openTheater(thI-1);$('#thNext').onclick=()=>openTheater(thI+1);
-th.addEventListener('click',e=>{if(e.target===th)closeTheater()});
-const tp=()=>thV.paused?thV.play().catch(()=>{}):thV.pause();
-thV.addEventListener('click',tp);$('#thPlay').onclick=tp;$('#thMute').onclick=()=>{thV.muted=!thV.muted};
-thV.addEventListener('play',()=>$('#thPlay').textContent='❚❚');thV.addEventListener('pause',()=>$('#thPlay').textContent='▶');
-thV.addEventListener('ended',()=>openTheater(thI+1));thV.addEventListener('volumechange',updMute);
-const prog=$('#thProg');let seeking=false;
-const seek=e=>{const b=prog.getBoundingClientRect();if(thV.duration)thV.currentTime=clamp((e.clientX-b.left)/b.width)*thV.duration};
-prog.addEventListener('pointerdown',e=>{seeking=true;prog.setPointerCapture(e.pointerId);seek(e)});prog.addEventListener('pointermove',e=>{if(seeking)seek(e)});prog.addEventListener('pointerup',()=>seeking=false);
-addEventListener('keydown',e=>{if(!th.classList.contains('on'))return;
-  if(e.key==='Escape')closeTheater();else if(e.key==='ArrowRight')openTheater(thI+1);else if(e.key==='ArrowLeft')openTheater(thI-1);
-  else if(e.key===' '){e.preventDefault();tp()}else if(e.key.toLowerCase()==='m'){thV.muted=!thV.muted}});
-
-/* footer: the crows leave */
-$('#flogo').addEventListener('click',e=>{if(RM)return;
-  for(let k=0;k<22;k++){const b=document.createElementNS('http://www.w3.org/2000/svg','svg');b.setAttribute('viewBox','0 0 44 20');b.setAttribute('class','bird');
-    b.innerHTML='<g class="w"><path d="M2 4 Q12 2 22 12 Q32 2 42 4"/></g>';document.body.appendChild(b);
-    const sx=e.clientX+(Math.random()-.5)*80,sy=e.clientY+(Math.random()-.5)*30,ex=sx+(Math.random()<.5?-1:1)*(innerWidth*.6+Math.random()*innerWidth*.5),ey=-80-Math.random()*200,sc=.5+Math.random()*1.1;
-    $('.w',b).style.animationDelay=(-Math.random()*.3)+'s';
-    b.animate([{transform:`translate(${sx}px,${sy}px) scale(${sc*.4})`},{transform:`translate(${lerp(sx,ex,.5)}px,${lerp(sy,ey,.4)-80}px) scale(${sc})`},{transform:`translate(${ex}px,${ey}px) scale(${sc*1.2})`}],
-      {duration:1800+Math.random()*1400,delay:k*40,easing:'cubic-bezier(.3,.1,.4,1)',fill:'forwards'}).onfinish=()=>b.remove()}});
-
-/* loop */
-let fr=0;
-(function loop(now){fr++;
-  scenes.forEach(s=>upd(s,now));
-  if(!RM&&fr%3===0)grain();
-  if(FINE){px=lerp(px,mx+24,.18);py=lerp(py,my-150,.18);peek.style.transform=`translate3d(${px}px,${py}px,0)`}
-  if(th.classList.contains('on')&&thV.duration){$('#thFill').style.width=(thV.currentTime/thV.duration*100)+'%';$('#thTime').textContent=`${mmss(thV.currentTime)} / ${mmss(thV.duration)}`}
-  requestAnimationFrame(loop)})(performance.now());
-})();
-</script>
 </body>
 </html>

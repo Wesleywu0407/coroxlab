@@ -1,0 +1,678 @@
+/* =========================================================
+   COROX Films — styles
+   1. Tokens & base
+   2. Header
+   3. Scenes (shared sticky stage + footage reveal)
+   4. Act 1: logo split
+   5. Film acts: title split
+   6. Index
+   7. Footer & crows
+   8. Player (theater)
+   9. Responsive & reduced motion
+   ========================================================= */
+
+
+/* 1. Tokens & base ---------------------------------------- */
+
+:root {
+  --ink: #09090a;
+  --bone: #e7e3d8;
+  --dim: rgba(231, 227, 216, .56);
+  --faint: rgba(231, 227, 216, .2);
+  --line: rgba(231, 227, 216, .14);
+
+  --display: "Jost", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --vh: 100vh;
+}
+
+@supports (height: 100svh) {
+  :root { --vh: 100svh; }
+}
+
+/* A night film label: dark in both colour schemes on purpose. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --ink: #09090a; }
+}
+:root[data-theme="dark"] { --ink: #09090a; }
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background: var(--ink);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--ink);
+  color: var(--bone);
+  font-family: var(--display);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img, video, svg { display: block; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--bone);
+  color: #000;
+}
+
+/* Film grain overlay (tiles are generated in js/main.js) */
+#grain {
+  position: fixed;
+  inset: -10%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: .08;
+  mix-blend-mode: screen;
+  background-size: 128px 128px;
+}
+
+
+/* 2. Header ----------------------------------------------- */
+
+.top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  padding: 16px clamp(16px, 3vw, 32px);
+  mix-blend-mode: difference;
+  color: #fff;
+}
+
+.top img {
+  height: 40px;
+  width: auto;
+  margin: -12px -10px;
+}
+
+.top nav {
+  margin-left: auto;
+  display: flex;
+  gap: 22px;
+}
+
+.top nav button {
+  font: 400 11px/1 var(--mono);
+  letter-spacing: .18em;
+  opacity: .8;
+}
+
+.top nav button:hover {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+
+/* 3. Scenes ----------------------------------------------- */
+
+.scene { position: relative; }
+
+.stick {
+  position: sticky;
+  top: 0;
+  height: var(--vh);
+  overflow: hidden;
+}
+
+/* Footage sits behind a clip-path slit that JS opens to full screen */
+.reveal {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(50% 50% 50% 50%);
+  will-change: clip-path;
+  background: #000;
+}
+
+.reveal video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reveal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .35), transparent 30%, transparent 55%, rgba(0, 0, 0, .75));
+}
+
+.kicker {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: 0 16px;
+  text-align: center;
+  font: 400 11px/1.5 var(--mono);
+  letter-spacing: .32em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 28px;
+  text-align: center;
+  font: 400 10px/1 var(--mono);
+  letter-spacing: .3em;
+  color: var(--dim);
+}
+
+.hint span {
+  display: inline-block;
+  animation: nudge 1.6s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  50% { transform: translateY(6px); }
+}
+
+/* Caption that fades in once the footage is full screen */
+.cap {
+  position: absolute;
+  left: clamp(16px, 5vw, 64px);
+  right: clamp(16px, 5vw, 64px);
+  bottom: clamp(40px, 10vh, 110px);
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.cap h1,
+.cap h3 {
+  font: 800 clamp(40px, 9vw, 140px)/.9 var(--display);
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+
+.cap .meta {
+  margin-bottom: 14px;
+  font: 400 11px/1.5 var(--mono);
+  letter-spacing: .24em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.cap p {
+  margin-top: 18px;
+  max-width: 34em;
+  font: 400 clamp(15px, 1.6vw, 20px)/1.5 var(--display);
+}
+
+.btn {
+  margin-top: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px 14px 16px;
+  border-radius: 999px;
+  background: var(--bone);
+  color: #000;
+  font: 600 12px/1 var(--mono);
+  letter-spacing: .18em;
+  transition: transform .2s;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+/* Play triangle */
+.btn i {
+  width: 0;
+  height: 0;
+  border-left: 9px solid currentColor;
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+
+/* 4. Act 1: logo split ------------------------------------ */
+
+.door { height: calc(var(--vh) * 3.2); }
+
+.logo-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(94vw, 1240px);
+  aspect-ratio: 2.5;
+  transform: translate(-50%, -52%);
+}
+
+.lg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Three copies of logo.png, clipped to "CORO", top of X, bottom of X.
+   Polygons are traced from the transparent logo's alpha. */
+.lg-coro {
+  clip-path: polygon(0 0, 75.3% 0, 75.3% 26%, 77.3% 33.3%, 78% 36.7%, 79.3% 41.7%, 79.7% 48.3%,
+    80.3% 55%, 80% 58.3%, 78.7% 63.3%, 77% 68.3%, 75.7% 71.7%, 75.3% 76%, 75.3% 100%, 0 100%);
+}
+
+.lg-xt {
+  clip-path: polygon(75.3% 0, 100% 0, 100% 48.3%, 79.7% 48.3%, 79.3% 41.7%, 78% 36.7%, 77.3% 33.3%, 75.3% 26%);
+}
+
+.lg-xb {
+  clip-path: polygon(79.7% 48.3%, 100% 48.3%, 100% 100%, 75.3% 100%, 75.3% 76%, 75.7% 71.7%,
+    77% 68.3%, 78.7% 63.3%, 80% 58.3%, 80.3% 55%);
+}
+
+.door .kicker { top: calc(50% - min(94vw, 1240px) * .2 - 40px); }
+
+
+/* 5. Film acts: title split ------------------------------- */
+
+.act { height: calc(var(--vh) * 2.8); }
+
+.ttl {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 120px; /* real size set by fit() in js/main.js */
+  white-space: nowrap;
+}
+
+.ttl h2 {
+  padding: .04em 0;
+  font: 800 1em/.82 var(--display);
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  color: var(--bone);
+  will-change: transform, opacity;
+}
+
+.ttl .tp { clip-path: inset(0 0 50% 0); }   /* top half */
+
+.ttl .bt {                                    /* bottom half */
+  position: absolute;
+  inset: 0;
+  clip-path: inset(50% 0 0 0);
+}
+
+.act .kicker { top: calc(50% - var(--th, 120px) * .5 - 48px); }
+
+
+/* 6. Index ------------------------------------------------ */
+
+.index {
+  padding: clamp(90px, 14vh, 160px) clamp(16px, 3vw, 48px) clamp(60px, 10vh, 120px);
+  background: var(--ink);
+}
+
+.index h2 {
+  margin-bottom: clamp(28px, 5vh, 56px);
+  font: 800 clamp(44px, 8vw, 128px)/.88 var(--display);
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+
+.rows { border-top: 1px solid var(--line); }
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 80px minmax(0, 1fr) 260px 70px 40px;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: clamp(18px, 3vh, 28px) 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  overflow: hidden;
+}
+
+/* Bone fill that wipes up on hover */
+.row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bone);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform .45s cubic-bezier(.7, 0, .2, 1);
+}
+
+.row > * {
+  position: relative;
+  transition: color .3s;
+}
+
+.row:hover::before,
+.row:focus-visible::before { transform: scaleY(1); }
+
+.row:hover > *,
+.row:focus-visible > * { color: #000; }
+
+.row:focus-visible { outline: none; }
+
+.row .id {
+  font: 600 12px/1 var(--mono);
+  letter-spacing: .2em;
+  color: var(--dim);
+}
+
+.row .tt {
+  font: 800 clamp(28px, 5vw, 76px)/1 var(--display);
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row .pl,
+.row .du {
+  font: 400 11px/1.4 var(--mono);
+  letter-spacing: .14em;
+  color: var(--dim);
+}
+
+.row .go {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  display: grid;
+  place-items: center;
+}
+
+.row .go i {
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  border-left: 8px solid currentColor;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+/* Hover preview that follows the cursor */
+#peek {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 70;
+  width: 190px;
+  aspect-ratio: 9 / 16;
+  border-radius: 12px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .25s;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+}
+
+#peek.wide {
+  width: 320px;
+  aspect-ratio: 16 / 9;
+}
+
+#peek.on { opacity: 1; }
+
+#peek video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* 7. Footer & crows --------------------------------------- */
+
+footer {
+  min-height: calc(var(--vh) * .8);
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  padding: 80px 16px 40px;
+  text-align: center;
+  background: #000;
+}
+
+.flogo {
+  width: min(80vw, 640px);
+  aspect-ratio: 2.5;
+}
+
+.flogo img {
+  width: 100%;
+  height: 100%;
+}
+
+footer p {
+  margin-top: 6px;
+  font: 400 11px/1.6 var(--mono);
+  letter-spacing: .3em;
+  color: var(--dim);
+}
+
+footer .copy {
+  margin-top: 48px;
+  font-size: 10px;
+  color: var(--faint);
+}
+
+.bird {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 85;
+  width: 44px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.bird path {
+  fill: none;
+  stroke: var(--bone);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bird .w {
+  transform-origin: 22px 10px;
+  animation: flap .32s ease-in-out infinite alternate;
+}
+
+@keyframes flap {
+  to { transform: scaleY(-.55); }
+}
+
+
+/* 8. Player (theater) ------------------------------------- */
+
+#theater {
+  position: fixed;
+  inset: 0;
+  z-index: 92;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, .95);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s;
+}
+
+#theater.on {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Vertical (9:16) by default; .wide switches to 16:9 */
+.th-box {
+  position: relative;
+  height: min(88vh, calc(100vw * 16 / 9 - 40px));
+  aspect-ratio: 9 / 16;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.th-box.wide {
+  height: auto;
+  width: min(calc(100vw - 150px), calc(86vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+}
+
+.th-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.th-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 14px 14px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, .8));
+  font: 400 10px/1 var(--mono);
+  letter-spacing: .12em;
+}
+
+.th-bar button {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, .4);
+  display: grid;
+  place-items: center;
+  font: 600 10px/1 var(--mono);
+}
+
+.th-prog {
+  height: 22px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.th-prog div {
+  position: relative;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, .25);
+}
+
+.th-prog span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 2px;
+  background: var(--bone);
+}
+
+/* Prev / next arrows */
+.th-side {
+  position: fixed;
+  top: 50%;
+  z-index: 2;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, .4);
+  font: 400 22px/1 var(--display);
+}
+
+.th-prev { left: clamp(8px, 4vw, 60px); }
+.th-next { right: clamp(8px, 4vw, 60px); }
+
+.th-close {
+  position: fixed;
+  top: 16px;
+  right: clamp(16px, 3vw, 32px);
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .5);
+  font: 600 11px/1 var(--mono);
+  letter-spacing: .2em;
+}
+
+.th-title {
+  position: fixed;
+  left: clamp(16px, 3vw, 32px);
+  top: 16px;
+  font: 400 11px/1.6 var(--mono);
+  letter-spacing: .2em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.th-title strong {
+  display: block;
+  font: 800 24px/1.1 var(--display);
+  letter-spacing: 0;
+  color: var(--bone);
+}
+
+
+/* 9. Responsive & reduced motion -------------------------- */
+
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+  .row .pl,
+  .row .go { display: none; }
+}
+
+@media (max-width: 700px) {
+  .th-box.wide { width: calc(100vw - 24px); }
+  .th-title { display: none; }
+  .th-side {
+    top: auto;
+    bottom: 16px;
+    transform: none;
+  }
+}
+
+/* Widescreen films show the whole frame on tall screens */
+@media (orientation: portrait) {
+  .act.wide .reveal video { object-fit: contain; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; }
+}
