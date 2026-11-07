@@ -61,4 +61,23 @@ export const FILMS = [
     wide: true,
     line: 'Storm clouds, cold water, a kid who will not paddle in. He waits for the last one.',
   },
+  {
+    id: '006',
+    title: 'Hatch',
+    time: '04:44',
+    place: 'The well',
+    dur: '00:34',
+    src: 'media/films/006-hatch.mp4',
+    line: 'A gloved hand learns fire. A bow of light, a fight by the well, a ring burning in the palm. Then he looks up and sees himself.',
+  },
+  {
+    id: '007',
+    title: 'Skyveil',
+    time: '23:58',
+    place: 'Clock tower',
+    dur: '01:52',
+    src: 'media/films/007-skyveil.mp4',
+    wide: true,
+    line: 'Two minutes to midnight at the academy. A wizard, a brawler and an elf, against something that should have stayed in chains.',
+  },
 ];
