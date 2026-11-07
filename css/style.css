@@ -472,8 +472,22 @@ footer p {
   color: var(--dim);
 }
 
+.design-credit {
+  margin-top: 24px;
+  text-transform: uppercase;
+}
+
+.design-credit strong {
+  display: block;
+  margin-top: 4px;
+  font: 500 clamp(26px, 4vw, 40px)/1.1 var(--display);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--bone);
+}
+
 footer .copy {
-  margin-top: 48px;
+  margin-top: 32px;
   font-size: 10px;
   color: var(--faint);
 }
