@@ -7,7 +7,7 @@ document.body.insertAdjacentHTML('beforeend', `<dialog id="theater" aria-label="
     <div class="th-box">
       <video id="thV" playsinline preload="auto"></video>
       <div class="th-bar">
-        <button id="thPlay" aria-label="Play or pause">❚❚</button>
+        <button id="thPlay" autofocus aria-label="Play or pause">❚❚</button>
         <div class="th-prog" id="thProg"><div><span id="thFill"></span></div></div>
         <span id="thTime">00:00 / 00:00</span>
         <button id="thMute" aria-label="Mute">SND</button>
@@ -49,6 +49,7 @@ export function openTheater(i) {
 }
 
 theater.addEventListener('close', () => {
+  if (theater.open) return;
   player.pause();
   document.body.style.overflow = '';
 });
