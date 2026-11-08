@@ -78,20 +78,26 @@ function setupSection(section) {
   resize();
   addEventListener('resize', resize, { passive: true });
 
-  /* Draw one half of the clip into the frame, cover-fit */
-  function drawHalf(half, f) {
+  /* Still frame (same two-half layout as the clip), shown until the clip can play */
+  const poster = new Image();
+  poster.decoding = 'async';
+
+  /* Draw one half of the clip (or its still) into the frame, cover-fit */
+  function drawHalf(src, half, f) {
     const k = Math.max(f.w / SRC_W, f.h / SRC_H);
     const dw = SRC_W * k, dh = SRC_H * k;
-    ctx.drawImage(video, half * SRC_W, 0, SRC_W, SRC_H, f.x + (f.w - dw) / 2, f.y + (f.h - dh) / 2, dw, dh);
+    const sw = (src.videoWidth || src.naturalWidth) / 2, sh = src.videoHeight || src.naturalHeight;
+    ctx.drawImage(src, half * sw, 0, sw, sh, f.x + (f.w - dw) / 2, f.y + (f.h - dh) / 2, dw, dh);
   }
 
   function draw() {
     ctx.clearRect(0, 0, innerWidth, innerHeight);
-    if (video.readyState < 2) return;
+    const src = video.readyState >= 2 ? video : poster.complete && poster.naturalWidth ? poster : null;
+    if (!src) return;
     const f = s.frame;
     ctx.save();
     ctx.beginPath(); ctx.rect(f.x, f.y, f.w, f.h); ctx.clip();
-    drawHalf(0, f);                                         // previs underneath
+    drawHalf(src, 0, f);                                    // previs underneath
     const lean = f.h * SLANT / 2;
     const sx = f.x + f.w * s.seam;
     ctx.beginPath();                                        // final to the right of the seam
@@ -100,7 +106,7 @@ function setupSection(section) {
     ctx.lineTo(f.x + f.w + lean * 2, f.y + f.h);
     ctx.lineTo(sx - lean, f.y + f.h);
     ctx.closePath();
-    ctx.save(); ctx.clip(); drawHalf(1, f); ctx.restore();
+    ctx.save(); ctx.clip(); drawHalf(src, 1, f); ctx.restore();
     if (s.seam > -.2 && s.seam < 1.2) {
       ctx.strokeStyle = 'rgba(231,227,216,.95)';
       ctx.lineWidth = 2;
@@ -163,7 +169,11 @@ function setupSection(section) {
   new IntersectionObserver(([entry]) => {
     s.visible = entry.isIntersecting;
     if (s.visible) {
-      if (!s.loaded) { video.src = video.dataset.src; s.loaded = true; }
+      if (!s.loaded) {
+        poster.src = video.dataset.src.replace(/\.mp4$/, '.jpg');
+        video.src = video.dataset.src;
+        s.loaded = true;
+      }
       video.play().catch(() => {});
     } else {
       video.pause();
