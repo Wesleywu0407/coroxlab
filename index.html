@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="css/style.css">
 
   <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/process.js"></script>
 </head>
 <body>
   <div id="grain" aria-hidden="true"></div>
@@ -22,6 +23,7 @@
     <img src="media/logo.png" alt="COROX">
     <nav>
       <button data-go="act-001">FILMS</button>
+      <button data-go="process">PROCESS</button>
       <a href="film-index.html">INDEX</a>
     </nav>
   </header>
@@ -49,6 +51,41 @@
 
     <!-- Film acts are added here by js/main.js from js/films.js -->
   </main>
+
+  <!-- Process: the same split, but the seam turns a Blender previs into the film -->
+  <section class="process" id="process" aria-label="How a COROX film is made">
+    <div class="stick">
+      <div class="pr-stage">
+        <canvas aria-hidden="true"></canvas>
+        <div class="pr-seam" aria-hidden="true">
+          <span class="pr-tag pr-tag-l">BLENDER PREVIS</span>
+          <span class="pr-tag pr-tag-r">FINAL FILM</span>
+        </div>
+      </div>
+      <p class="kicker">How a COROX film is made</p>
+      <div class="ttl">
+        <h2 class="tp">Grey boxes</h2>
+        <h2 class="bt" aria-hidden="true">Grey boxes</h2>
+      </div>
+      <div class="hint">SCROLL <span>↓</span></div>
+
+      <div class="pr-cap">
+        <div class="meta">File 002 · Night Ride · <span id="prShot">POV</span></div>
+        <h3>Block it.<br>Then make it real.</h3>
+        <p>Every shot starts as grey boxes in Blender: where the camera sits, how low, how fast. Drag the line to see what each one became.</p>
+        <button class="btn btn-ghost" id="prSound" aria-pressed="false">SOUND ON</button>
+      </div>
+
+      <ol class="pr-shots" aria-label="Shots">
+        <li><button data-name="POV">POV</button></li>
+        <li><button data-name="Low chase">Low chase</button></li>
+        <li><button data-name="Level with the train">Level with the train</button></li>
+        <li><button data-name="The driver">The driver</button></li>
+        <li><button data-name="Overtake">Overtake</button></li>
+      </ol>
+    </div>
+    <video class="pr-src" data-src="media/process/night-ride-previs-final.mp4" muted loop playsinline preload="none"></video>
+  </section>
 
   <!-- Footer: click the logo to release the crows -->
   <footer>

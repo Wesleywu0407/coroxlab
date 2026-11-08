@@ -655,6 +655,166 @@ footer .copy {
 }
 
 
+/* 8b. Process act: previs → film seam ---------------------- */
+
+.process {
+  position: relative;
+  height: calc(var(--vh) * 4.2);
+  background: var(--ink);
+}
+
+.pr-stage {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(50% 50% 50% 50%);
+  will-change: clip-path;
+  touch-action: pan-y;          /* vertical scroll stays native; horizontal drags steer the seam */
+}
+
+.process.live .pr-stage { cursor: ew-resize; }
+
+.pr-stage canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* The source clip is only read by the canvas */
+.pr-src {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 2px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Labels that ride the seam */
+.pr-seam {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  transition: opacity .3s;
+}
+
+.pr-tag {
+  position: absolute;
+  top: 0;
+  padding: 7px 9px;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, .55);
+  font: 400 10px/1 var(--mono);
+  letter-spacing: .22em;
+  color: var(--bone);
+  transition: opacity .25s;
+}
+
+.pr-tag-l { right: 14px; }
+.pr-tag-r { left: 14px; }
+
+.process .kicker { top: calc(50% - var(--th, 120px) * .5 - 48px); }
+
+/* The faded title and hints must not catch the pointer meant for the seam */
+.process :is(.ttl, .kicker, .hint) { pointer-events: none; }
+
+/* Wide screens: film in a 9:16 column, words on either side */
+.pr-cap {
+  position: absolute;
+  left: clamp(16px, 4vw, 56px);
+  bottom: clamp(40px, 10vh, 110px);
+  width: calc(50vw - 28.125vh - clamp(16px, 4vw, 56px) - 32px);
+  opacity: 0;
+}
+
+.pr-cap .meta {
+  margin-bottom: 14px;
+  font: 400 11px/1.5 var(--mono);
+  letter-spacing: .24em;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+
+.pr-cap h3 {
+  font: 800 clamp(30px, 3.6vw, 64px)/.92 var(--display);
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+}
+
+.pr-cap p {
+  margin-top: 18px;
+  max-width: 26em;
+  font: 400 clamp(14px, 1.2vw, 18px)/1.5 var(--display);
+  color: var(--dim);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--bone);
+  border: 1px solid var(--line);
+  padding: 13px 18px;
+}
+
+.btn-ghost[aria-pressed="true"] {
+  background: var(--bone);
+  color: #000;
+}
+
+.pr-shots {
+  position: absolute;
+  right: clamp(16px, 4vw, 56px);
+  bottom: clamp(40px, 10vh, 110px);
+  width: calc(50vw - 28.125vh - clamp(16px, 4vw, 56px) - 32px);
+  list-style: none;
+  counter-reset: shot;
+  opacity: 0;
+}
+
+.pr-shots li { counter-increment: shot; }
+
+.pr-shots button {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  width: 100%;
+  padding: 6px 0;
+  text-align: left;
+  font: 800 clamp(18px, 2vw, 34px)/1.05 var(--display);
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  color: var(--faint);
+  transition: color .3s;
+}
+
+.pr-shots button::before {
+  content: counter(shot, decimal-leading-zero);
+  font: 400 10px/1 var(--mono);
+  letter-spacing: .2em;
+}
+
+.pr-shots button:hover,
+.pr-shots button.on { color: var(--bone); }
+
+/* Tall screens: the film fills the screen, words sit on top of it */
+@media (max-aspect-ratio: 3/4) {
+  .pr-stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, .8));
+  }
+  .pr-cap {
+    right: clamp(16px, 5vw, 64px);
+    left: clamp(16px, 5vw, 64px);
+    width: auto;
+  }
+  .pr-cap h3 { font-size: clamp(34px, 9vw, 64px); }
+  .pr-cap p { color: var(--bone); }
+  .pr-shots { display: none; }
+}
+
+
 /* 9. Responsive & reduced motion -------------------------- */
 
 @media (max-width: 700px) {

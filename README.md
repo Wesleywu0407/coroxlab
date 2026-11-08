@@ -24,6 +24,7 @@ Use the HTTP address so the browser can load the modules. Refresh after editing 
 | Homepage scroll reveals and preview loading | [js/main.js](js/main.js) |
 | Film Index layout and previews | [film-index.html](film-index.html) and [js/catalog.js](js/catalog.js) |
 | Shared film player and controls | [js/player.js](js/player.js) |
+| The Process act (previs-to-film seam) | [js/process.js](js/process.js), its markup in [index.html](index.html) and the clip in [media/process/](media/process/) |
 | Film files or the transparent logo | [media/films/](media/films/) and [media/logo.png](media/logo.png) |
 | Production cache headers | [vercel.json](vercel.json) |
 
