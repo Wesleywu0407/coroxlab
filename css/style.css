@@ -419,6 +419,13 @@ button {
   font: 400 12px/1.5 var(--mono);
 }
 
+.process-link {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--bone);
+  text-underline-offset: .25em;
+}
+
 .film-card dt { color: var(--dim); }
 
 footer.catalog-footer {
@@ -546,8 +553,8 @@ footer .copy {
 
 .th-box.wide {
   height: auto;
-  width: min(calc(100vw - 150px), calc(86vh * 16 / 9));
-  aspect-ratio: 16 / 9;
+  width: min(calc(100vw - 150px), calc(86vh * var(--film-aspect, 1.777778)));
+  aspect-ratio: var(--film-aspect, 16 / 9);
 }
 
 .th-box video {

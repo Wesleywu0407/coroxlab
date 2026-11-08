@@ -30,7 +30,12 @@ const fine = matchMedia('(hover: hover) and (pointer: fine)');
 /* Where the film sits on screen
    - tall clips: full screen on phones, a 9:16 column on wide screens
    - wide clips: full screen on wide screens, a 16:9 band on phones */
-function frameRect(vw, vh, srcW, srcH) {
+function frameRect(vw, vh, srcW, srcH, contain) {
+  if (contain) {
+    const k = Math.min(vw / srcW, vh / srcH);
+    const w = srcW * k, h = srcH * k;
+    return { x: (vw - w) / 2, y: (vw / vh < .75 ? vh * .38 : vh / 2) - h / 2, w, h };
+  }
   const tallScreen = vw / vh < .75;
   if (srcH > srcW) {
     if (tallScreen) return { x: 0, y: 0, w: vw, h: vh };
@@ -201,7 +206,7 @@ function setupSection(section) {
     kicker.style.opacity = hint.style.opacity = 1 - e1 * 2;
 
     // Slit: from the title out to the film frame
-    s.frame = frameRect(vw, vh, SRC_W, SRC_H);
+    s.frame = frameRect(vw, vh, SRC_W, SRC_H, section.dataset.framing === 'contain');
     const f = s.frame;
     const box = ttl.getBoundingClientRect();
     const cx = box.left + box.width / 2, cy = box.top + box.height / 2;

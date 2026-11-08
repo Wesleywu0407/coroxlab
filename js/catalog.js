@@ -17,7 +17,8 @@ FILMS.forEach((film, index) => {
     <div class="file-meta"><span>File ${film.id} · ${film.place}</span><span>${film.dur}</span></div>
     <h2>${film.title}</h2>
     <p class="synopsis">${film.description}</p>
-    <dl><dt>AI video model</dt><dd>${film.model}</dd><dt>Production</dt><dd>${film.production}</dd></dl>`;
+    <dl><dt>AI video model</dt><dd>${film.model}</dd><dt>Production</dt><dd>${film.production}</dd></dl>
+    ${film.process ? `<a class="process-link" href="${film.process}">Compare the Blender previs and film →</a>` : ''}`;
   const button = card.querySelector('button');
   const preview = card.querySelector('video');
   button.addEventListener('click', () => openTheater(index));

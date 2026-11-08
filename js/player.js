@@ -33,7 +33,19 @@ export function openTheater(i) {
   current = (i + FILMS.length) % FILMS.length;
   const film = FILMS[current];
   playerBox.classList.toggle('wide', !!film.wide);
-  player.src = film.src;
+  if (film.aspect) playerBox.style.setProperty('--film-aspect', film.aspect);
+  else playerBox.style.removeProperty('--film-aspect');
+  const sources = [
+    ...(film.theaterSources || []),
+    [film.src, 'video/mp4'],
+  ];
+  player.replaceChildren(...sources.map(([url, type]) => {
+    const source = document.createElement('source');
+    source.src = url;
+    source.type = type;
+    return source;
+  }));
+  player.load();
   player.muted = false;
   // A fast switch or close can abort play. Only autoplay denial needs a muted retry.
   player.play().catch(error => {
