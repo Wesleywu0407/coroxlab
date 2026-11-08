@@ -7,13 +7,18 @@
    5. Video loading
    6. Header nav
    7. Film grain
-   8. Index + hover preview
-   9. Player (theater)
-   10. Footer crows
-   11. Main loop
+   8. Footer crows
+   9. Main loop
    ========================================================= */
 
 import { FILMS } from './films.js';
+import { openTheater, theater, theaterOpen } from './player.js';
+
+function redirectOldIndex() {
+  if (location.hash === '#index') location.replace('film-index.html');
+}
+redirectOldIndex();
+addEventListener('hashchange', redirectOldIndex);
 
 
 /* 1. Helpers ---------------------------------------------- */
@@ -25,14 +30,7 @@ const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const ease = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2); // easeInOutCubic
 
-const pad = n => String(n).padStart(2, '0');
-const mmss = s => pad(Math.floor(s / 60)) + ':' + pad(Math.floor(s % 60));
-
 const REDUCED_MOTION = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const FINE_POINTER = matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-const theater = $('#theater');
-const theaterOpen = () => theater.classList.contains('on');
 
 
 /* 2. Build film acts from FILMS --------------------------- */
@@ -215,113 +213,7 @@ function stepGrain() {
 stepGrain();
 
 
-/* 8. Index + hover preview -------------------------------- */
-
-$('#rows').innerHTML = FILMS.map((film, i) => `
-  <button class="row" data-i="${i}">
-    <span class="id">${film.id}</span>
-    <span class="tt">${film.title}</span>
-    <span class="pl">${film.time} · ${film.place.toUpperCase()}</span>
-    <span class="du">${film.dur}</span>
-    <span class="go"><i></i></span>
-  </button>`).join('');
-
-const peek = $('#peek');
-const peekVideo = $('video', peek);
-let mouseX = 0, mouseY = 0, peekX = 0, peekY = 0;
-
-addEventListener('pointermove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
-
-$$('.row').forEach(row => {
-  row.addEventListener('click', () => openTheater(+row.dataset.i));
-  if (!FINE_POINTER) return;
-  row.addEventListener('pointerenter', () => {
-    const film = FILMS[+row.dataset.i];
-    if (peekVideo.dataset.src !== film.src) {
-      peekVideo.src = film.src;
-      peekVideo.dataset.src = film.src;
-    }
-    peek.classList.toggle('wide', !!film.wide);
-    peekVideo.play().catch(() => {});
-    peek.classList.add('on');
-  });
-  row.addEventListener('pointerleave', () => {
-    peek.classList.remove('on');
-    peekVideo.pause();
-  });
-});
-
-
-/* 9. Player (theater) ------------------------------------- */
-
-const player = $('#thV');
-const playerBox = $('.th-box');
-const playBtn = $('#thPlay');
-const muteBtn = $('#thMute');
-const progress = $('#thProg');
-let current = 0;
-
-function openTheater(i) {
-  current = (i + FILMS.length) % FILMS.length;
-  const film = FILMS[current];
-  playerBox.classList.toggle('wide', !!film.wide);
-  player.src = film.src;
-  player.muted = false;
-  // Try with sound; fall back to muted if the browser blocks it
-  player.play().catch(() => { player.muted = true; player.play().catch(() => {}); });
-  $('#thTitle').innerHTML = `<strong>${film.title}</strong>File ${film.id} · ${film.time} · ${film.place}`;
-  theater.classList.add('on');
-  document.body.style.overflow = 'hidden';
-  $$('.reveal video').forEach(v => v.pause());
-  updateMuteLabel();
-}
-
-function closeTheater() {
-  theater.classList.remove('on');
-  player.pause();
-  document.body.style.overflow = '';
-  resumeVisibleVideos();
-}
-
-const togglePlay = () => (player.paused ? player.play().catch(() => {}) : player.pause());
-const toggleMute = () => { player.muted = !player.muted; };
-function updateMuteLabel() { muteBtn.textContent = player.muted ? 'MUTE' : 'SND'; }
-
-$('#thClose').onclick = closeTheater;
-$('#thPrev').onclick = () => openTheater(current - 1);
-$('#thNext').onclick = () => openTheater(current + 1);
-theater.addEventListener('click', e => { if (e.target === theater) closeTheater(); });
-
-player.addEventListener('click', togglePlay);
-playBtn.onclick = togglePlay;
-muteBtn.onclick = toggleMute;
-player.addEventListener('play', () => { playBtn.textContent = '❚❚'; });
-player.addEventListener('pause', () => { playBtn.textContent = '▶'; });
-player.addEventListener('ended', () => openTheater(current + 1));
-player.addEventListener('volumechange', updateMuteLabel);
-
-// Seek by click or drag on the progress bar
-let seeking = false;
-const seekTo = e => {
-  const b = progress.getBoundingClientRect();
-  if (player.duration) player.currentTime = clamp((e.clientX - b.left) / b.width) * player.duration;
-};
-progress.addEventListener('pointerdown', e => { seeking = true; progress.setPointerCapture(e.pointerId); seekTo(e); });
-progress.addEventListener('pointermove', e => { if (seeking) seekTo(e); });
-progress.addEventListener('pointerup', () => { seeking = false; });
-
-// Keyboard: Esc close, ←/→ prev/next, Space play/pause, M mute
-addEventListener('keydown', e => {
-  if (!theaterOpen()) return;
-  if (e.key === 'Escape') closeTheater();
-  else if (e.key === 'ArrowRight') openTheater(current + 1);
-  else if (e.key === 'ArrowLeft') openTheater(current - 1);
-  else if (e.key === ' ') { e.preventDefault(); togglePlay(); }
-  else if (e.key.toLowerCase() === 'm') toggleMute();
-});
-
-
-/* 10. Footer: click the logo and the crows leave ---------- */
+/* 8. Footer: click the logo and the crows leave ---------- */
 
 $('#flogo').addEventListener('click', e => {
   if (REDUCED_MOTION) return;
@@ -353,27 +245,15 @@ $('#flogo').addEventListener('click', e => {
 });
 
 
-/* 11. Main loop ------------------------------------------- */
+/* 9. Main loop ------------------------------------------- */
 
-const fill = $('#thFill');
-const timeLabel = $('#thTime');
+theater.addEventListener('close', resumeVisibleVideos);
 let frame = 0;
 
 (function loop(now) {
   frame++;
   scenes.forEach(sc => updateScene(sc, now));
   if (!REDUCED_MOTION && frame % 3 === 0) stepGrain();
-
-  if (FINE_POINTER) {
-    peekX = lerp(peekX, mouseX + 24, .18);
-    peekY = lerp(peekY, mouseY - 150, .18);
-    peek.style.transform = `translate3d(${peekX}px, ${peekY}px, 0)`;
-  }
-
-  if (theaterOpen() && player.duration) {
-    fill.style.width = (player.currentTime / player.duration) * 100 + '%';
-    timeLabel.textContent = `${mmss(player.currentTime)} / ${mmss(player.duration)}`;
-  }
 
   requestAnimationFrame(loop);
 })(performance.now());

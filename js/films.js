@@ -1,7 +1,7 @@
 /* =========================================================
    COROX Films — film list
    This is the only file to edit when adding or changing a film.
-   Each entry becomes one scroll act and one row in the index.
+   Each entry becomes one scroll act and one card in the Film Index.
 
    id     File number shown on the site ("004")
    title  Big split title
@@ -21,6 +21,11 @@ export const FILMS = [
     place: 'Taipei',
     dur: '00:18',
     src: 'media/films/001-3am.mp4',
+    still: "media/stills/001-3am.jpg",
+    stillAlt: "A crow in a dark coat beside a brightly lit shop refrigerator.",
+    description: "A crow in a dark coat buys a can of coffee in Taipei. We follow his scooter through the wet streets to a rooftop, where a flock passes close enough to make him lift one hand.",
+    model: "Kling 3.0 Pro",
+    production: "Higgsfield",
     line: 'A crow who became a man and forgot how to fly. Convenience store, scooter, rooftop. We kept our distance and filmed.',
   },
   {
@@ -30,6 +35,11 @@ export const FILMS = [
     place: 'Tokyo',
     dur: '00:24',
     src: 'media/films/002-night-ride.mp4',
+    still: "media/stills/002-night-ride.jpg",
+    stillAlt: "A cyclist in a red cap rides alongside the lit windows of a passing train.",
+    description: "A cat in a red cap rides a black fixed-gear through Tokyo after the rain. At the crossing he watches the last train pass. A moment later its driver looks out and sees the same rider keeping pace.",
+    model: "Kling 3.0 Pro and Kling 4.0",
+    production: "Higgsfield",
     line: 'Red cap, white tee, black fixed-gear. Every night at 23:47 he races the last train.',
   },
   {
@@ -39,6 +49,11 @@ export const FILMS = [
     place: '24-hour store',
     dur: '00:34',
     src: 'media/films/003-bass-gravity.mp4',
+    still: "media/stills/003-bass-gravity.jpg",
+    stillAlt: "A white rabbit floats among brightly coloured packets in a shop aisle.",
+    description: "A white rabbit stamps a foot in the fluorescent aisle of a convenience store. The shelves empty themselves into the air. As bottles and wrappers drift past, the rabbit finds something to ride.",
+    model: "Seedance 2.5",
+    production: "Higgsfield",
     line: 'A white rabbit walks into a 24-hour store. Three stomps, and the whole place tips upside down.',
   },
   {
@@ -49,6 +64,11 @@ export const FILMS = [
     dur: '00:32',
     src: 'media/films/008-the-star-keeper.mp4',
     wide: true,
+    still: "media/stills/008-the-star-keeper.jpg",
+    stillAlt: "A small gecko in a brass-rimmed space helmet rests on the clock’s red hand.",
+    description: "A gecko reaches down to restart a celestial clock. From inside the helmet we skim across the dial on the red second hand, thread the star gates and follow a loose gold star all the way back to the visor.",
+    model: "Seedance 2.5",
+    production: "AdaL",
     line: 'A gecko in a spacesuit gets the clock running again. Then the second hand takes off with him on it.',
   },
   {
@@ -59,6 +79,11 @@ export const FILMS = [
     dur: '00:30',
     src: 'media/films/004-spotter.mp4',
     wide: true,
+    still: "media/stills/004-spotter.jpg",
+    stillAlt: "Close-up of an owl’s amber eyes under the brim of a cowboy hat.",
+    description: "At an outback archery range, a tiny owl in a cowboy hat takes on a kangaroo. The bow barely budges. When a gloved hand lifts it, the owl finally has a place to perch and a clear sightline to the target.",
+    model: "Seedance 2.5",
+    production: "AdaL · Upscaled on Higgsfield",
     line: 'A small owl, a bow three times his size, a kangaroo who will not stop smirking. Then someone else picks up the bow.',
   },
   {
@@ -69,6 +94,11 @@ export const FILMS = [
     dur: '00:30',
     src: 'media/films/005-one-more-wave.mp4',
     wide: true,
+    still: "media/stills/005-one-more-wave.jpg",
+    stillAlt: "A young surfer lies on his board, looking out across the water at sunrise.",
+    description: "Past the break at dawn, a young surfer lies flat on his board and watches the swell. He lets a wave pass, turns for the next one and finds a pocket of open water under the curling lip.",
+    model: "Seedance 2.5",
+    production: "AdaL · Narration by ElevenLabs",
     line: 'Storm clouds, cold water, a kid who will not paddle in. He waits for the last one.',
   },
   {
@@ -78,6 +108,11 @@ export const FILMS = [
     place: 'The well',
     dur: '00:34',
     src: 'media/films/006-hatch.mp4',
+    still: "media/stills/006-hatch.jpg",
+    stillAlt: "A gloved hand draws a glowing golden bow.",
+    description: "From inside a pair of gloves, we watch fire gather in one palm and a bow of light take shape. A fight at the well leaves a ring burning in the hand. Looking up brings the stranger on the other side into focus.",
+    model: "Seedance",
+    production: "Higgsfield",
     line: 'A gloved hand learns fire. A bow of light, a fight by the well, a ring burning in the palm. Then he looks up and sees himself.',
   },
   {
@@ -88,6 +123,11 @@ export const FILMS = [
     dur: '01:52',
     src: 'media/films/007-skyveil.mp4',
     wide: true,
+    still: "media/stills/007-skyveil.jpg",
+    stillAlt: "Figures face a dark creature outside the academy under a deep blue sky.",
+    description: "Two minutes before midnight, something breaks loose at the academy clock tower. A wizard, a brawler and an elf take up positions around the clock as the fight spills across the stonework.",
+    model: "Seedance",
+    production: "Higgsfield",
     line: 'Two minutes to midnight at the academy. A wizard, a brawler and an elf, against something that should have stayed in chains.',
   },
 ];

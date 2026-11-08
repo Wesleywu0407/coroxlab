@@ -1,6 +1,6 @@
 # COROX Films
 
-A collection of short films about the city’s other residents. Scroll through the COROX logo to reveal the opening footage, then through each film’s title to see a muted excerpt. Choose **Watch with sound** to open the film, or jump straight to a title from the **Index**. [Visit COROX Films](https://corox.vercel.app/)
+A collection of short films about the city’s other residents. Scroll through the COROX logo to reveal the opening footage, then through each film’s title to see a muted excerpt. Choose **Watch with sound** to open the film, or jump straight to a title from the [Film Index](https://corox.vercel.app/film-index.html). [Visit COROX Films](https://corox.vercel.app/)
 
 ## Run locally
 
@@ -18,10 +18,12 @@ Use the HTTP address so the browser can load the modules. Refresh after editing 
 
 | To change | Edit |
 | --- | --- |
-| Film titles, story times and locations, runtimes, loglines, or running order | [js/films.js](js/films.js) |
-| Opening footage and copy, header navigation, footer, or player markup | [index.html](index.html) |
+| Film titles, story times and locations, runtimes, loglines, synopses, model credits, stills, or running order | [js/films.js](js/films.js) |
+| Opening footage and copy, header navigation, or homepage footer | [index.html](index.html) |
 | Typography, layout, logo masks, or portrait and widescreen player sizing | [css/style.css](css/style.css) |
-| Scroll reveals, preview loading, index interactions, or playback controls | [js/main.js](js/main.js) |
+| Homepage scroll reveals and preview loading | [js/main.js](js/main.js) |
+| Film Index layout and previews | [film-index.html](film-index.html) and [js/catalog.js](js/catalog.js) |
+| Shared film player and controls | [js/player.js](js/player.js) |
 | Film files or the transparent logo | [media/films/](media/films/) and [media/logo.png](media/logo.png) |
 | Production cache headers | [vercel.json](vercel.json) |
 
@@ -45,6 +47,11 @@ Use the HTTP address so the browser can load the modules. Refresh after editing 
      place: 'Taipei',
      dur: '00:30',
      src: 'media/films/006-example.mp4',
+     still: 'media/stills/006-example.jpg',
+     stillAlt: 'A worker under a streetlight at dawn.',
+     description: 'At dawn, a worker walks the empty bus route toward the first light still burning.',
+     model: 'Model used for the footage',
+     production: 'Production platform',
      wide: true,
      line: 'A night-shift worker catches the first train home.',
    },
@@ -52,7 +59,7 @@ Use the HTTP address so the browser can load the modules. Refresh after editing 
 
    `time` is the clock time in the story. `dur` is the running time printed in the caption and index. Set it from the finished MP4. The player reads its own duration from the video.
 
-3. Refresh the local site. Check that the new film appears in both the scroll sequence and the index. Open it from each, confirm the framing and sound, and seek near the end to check the transition to the next film.
+3. Save a frame from the finished film at the specified still path. Credit the model and production platform from the generation record. Refresh the local site. Check that the new film appears in both the scroll sequence and the index. Open it from each, confirm the framing and sound, and seek near the end to check the transition to the next film.
 
 Array order sets the scroll sequence, index order, and playback order. Two references live separately in [index.html](index.html). If you change which film comes first, update the **Films** button’s `data-go="act-001"` to match its section ID. If you rename or replace the opening clip, update the video inside `#door`, which currently points to `003-bass-gravity.mp4`.
 

@@ -22,7 +22,7 @@
     <img src="media/logo.png" alt="COROX">
     <nav>
       <button data-go="act-001">FILMS</button>
-      <button data-go="index">INDEX</button>
+      <a href="film-index.html">INDEX</a>
     </nav>
   </header>
 
@@ -50,12 +50,6 @@
     <!-- Film acts are added here by js/main.js from js/films.js -->
   </main>
 
-  <!-- Index -->
-  <section class="index" id="index">
-    <h2>Index</h2>
-    <div class="rows" id="rows"></div>
-  </section>
-
   <!-- Footer: click the logo to release the crows -->
   <footer>
     <button class="flogo" id="flogo" aria-label="COROX"><img src="media/logo.png" alt="COROX"></button>
@@ -63,24 +57,5 @@
     <p class="copy">© 2026 COROX</p>
   </footer>
 
-  <!-- Hover preview for index rows -->
-  <div id="peek"><video muted loop playsinline preload="none"></video></div>
-
-  <!-- Player -->
-  <div id="theater" role="dialog" aria-modal="true" aria-label="Film player">
-    <div class="th-title" id="thTitle"></div>
-    <button class="th-close" id="thClose">CLOSE ✕</button>
-    <button class="th-side th-prev" id="thPrev" aria-label="Previous film">‹</button>
-    <div class="th-box">
-      <video id="thV" playsinline preload="auto"></video>
-      <div class="th-bar">
-        <button id="thPlay" aria-label="Play or pause">❚❚</button>
-        <div class="th-prog" id="thProg"><div><span id="thFill"></span></div></div>
-        <span id="thTime">00:00 / 00:00</span>
-        <button id="thMute" aria-label="Mute">SND</button>
-      </div>
-    </div>
-    <button class="th-side th-next" id="thNext" aria-label="Next film">›</button>
-  </div>
 </body>
 </html>
