@@ -19,12 +19,13 @@ Use the HTTP address so the browser can load the modules. Refresh after editing 
 | To change | Edit |
 | --- | --- |
 | Film titles, story times and locations, runtimes, loglines, synopses, model credits, stills, or running order | [js/films.js](js/films.js) |
-| Opening footage and copy, header navigation, or homepage footer | [index.html](index.html) |
+| Opening footage and copy, header navigation, or homepage footer | [index.html](index.html) (the header is repeated in [process.html](process.html) and [film-index.html](film-index.html)) |
 | Typography, layout, logo masks, or portrait and widescreen player sizing | [css/style.css](css/style.css) |
 | Homepage scroll reveals and preview loading | [js/main.js](js/main.js) |
 | Film Index layout and previews | [film-index.html](film-index.html) and [js/catalog.js](js/catalog.js) |
 | Shared film player and controls | [js/player.js](js/player.js) |
-| The Process act (previs-to-film seam) | [js/process.js](js/process.js), its markup in [index.html](index.html) and the clip in [media/process/](media/process/) |
+| The Process page (previs-to-film seam, one section per film) | [process.html](process.html), [js/process.js](js/process.js) and the clips in [media/process/](media/process/). Each clip is previs on the left half and the final on the right; set `data-w`/`data-h` to one half's size and `data-shots` to the shot start times |
+| Film grain (both pages) | [js/grain.js](js/grain.js) |
 | Film files or the transparent logo | [media/films/](media/films/) and [media/logo.png](media/logo.png) |
 | Production cache headers | [vercel.json](vercel.json) |
 

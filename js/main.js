@@ -13,6 +13,7 @@
 
 import { FILMS } from './films.js';
 import { openTheater, theater, theaterOpen } from './player.js';
+import { startGrain } from './grain.js';
 
 function redirectOldIndex() {
   if (location.hash === '#index') location.replace('film-index.html');
@@ -184,33 +185,9 @@ $$('[data-go]').forEach(btn => btn.addEventListener('click', () => {
 }));
 
 
-/* 7. Film grain: 6 noise tiles, cycled every 3rd frame ---- */
+/* 7. Film grain (js/grain.js) -------------------------- */
 
-const grainEl = $('#grain');
-const grainTiles = [];
-{
-  const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = 128;
-  const ctx = canvas.getContext('2d');
-  for (let k = 0; k < 6; k++) {
-    const img = ctx.createImageData(128, 128);
-    const d = img.data;
-    for (let i = 0; i < d.length; i += 4) {
-      const v = Math.random() < .5 ? 0 : (Math.random() * 255) | 0;
-      d[i] = d[i + 1] = d[i + 2] = v;
-      d[i + 3] = 255;
-    }
-    ctx.putImageData(img, 0, 0);
-    grainTiles.push(`url(${canvas.toDataURL()})`);
-  }
-}
-let grainIndex = 0;
-function stepGrain() {
-  grainIndex = (grainIndex + 1) % grainTiles.length;
-  grainEl.style.backgroundImage = grainTiles[grainIndex];
-  grainEl.style.backgroundPosition = `${(Math.random() * 128) | 0}px ${(Math.random() * 128) | 0}px`;
-}
-stepGrain();
+startGrain();
 
 
 /* 8. Footer: click the logo and the crows leave ---------- */
@@ -248,12 +225,7 @@ $('#flogo').addEventListener('click', e => {
 /* 9. Main loop ------------------------------------------- */
 
 theater.addEventListener('close', resumeVisibleVideos);
-let frame = 0;
-
 (function loop(now) {
-  frame++;
   scenes.forEach(sc => updateScene(sc, now));
-  if (!REDUCED_MOTION && frame % 3 === 0) stepGrain();
-
   requestAnimationFrame(loop);
 })(performance.now());

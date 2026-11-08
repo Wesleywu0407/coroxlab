@@ -655,7 +655,7 @@ footer .copy {
 }
 
 
-/* 8b. Process act: previs → film seam ---------------------- */
+/* 8b. Process page: previs → film seam (process.html) ------ */
 
 .process {
   position: relative;
@@ -795,6 +795,39 @@ footer .copy {
 .pr-shots button:hover,
 .pr-shots button.on { color: var(--bone); }
 
+/* Widescreen films (16:9 clip): full screen on wide screens, words over a shade */
+.pr-wide .pr-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, .85)),
+    linear-gradient(90deg, rgba(0, 0, 0, .45), transparent 45%);
+}
+
+.pr-wide .pr-cap { width: min(36vw, 520px); }
+.pr-wide .pr-cap p { color: var(--bone); }
+.pr-wide .pr-shots { width: min(26vw, 360px); }
+.pr-wide .pr-shots button { font-size: clamp(16px, 1.6vw, 26px); }
+.pr-wide .pr-shots button:not(.on) { color: rgba(231, 227, 216, .45); }
+
+/* End of the Process page */
+.pr-end .pr-next {
+  font: 800 clamp(40px, 8vw, 128px)/.9 var(--display);
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bone);
+}
+
+.pr-end .pr-next span {
+  display: inline-block;
+  transition: transform .3s;
+}
+
+.pr-end .pr-next:hover span { transform: translateX(.2em); }
+
 /* Tall screens: the film fills the screen, words sit on top of it */
 @media (max-aspect-ratio: 3/4) {
   .pr-stage::after {
@@ -802,7 +835,7 @@ footer .copy {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(180deg, transparent 45%, rgba(0, 0, 0, .8));
+    background: linear-gradient(180deg, transparent 35%, rgba(0, 0, 0, .85));
   }
   .pr-cap {
     right: clamp(16px, 5vw, 64px);
@@ -812,6 +845,7 @@ footer .copy {
   .pr-cap h3 { font-size: clamp(34px, 9vw, 64px); }
   .pr-cap p { color: var(--bone); }
   .pr-shots { display: none; }
+  .pr-wide .pr-cap { width: auto; }
 }
 
 

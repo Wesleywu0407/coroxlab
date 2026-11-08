@@ -1,21 +1,48 @@
 /* =========================================================
-   COROX Films — Process act ("Grey boxes")
-   One clip holds the Blender previs (left half) and the final
-   film (right half), frame-synced. Both halves are drawn onto
-   one canvas, split by a slanted seam at the angle of the X.
+   COROX Films — Process page (process.html)
+   One section per film. Its clip holds the Blender previs
+   (left half) and the final film (right half), frame-synced.
+   Both halves are drawn onto one canvas, split by a slanted
+   seam at the angle of the X.
 
    Scroll:  title splits → slit opens on the previs →
             the seam sweeps in and turns it into the film.
    Then:    the seam follows the pointer (drag on touch).
+
+   Per section (data attributes on .process):
+     data-w, data-h   size of ONE half of the clip
+     data-shots       shot start times in seconds, one per
+                      button in .pr-shots
    ========================================================= */
 
+import { startGrain } from './grain.js';
+
 const $ = (sel, el = document) => el.querySelector(sel);
+const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const ease = t => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
-const section = $('#process');
-if (section) {
+const SLANT = .2;                                   // seam lean, as a share of frame height
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(hover: hover) and (pointer: fine)');
+
+/* Where the film sits on screen
+   - tall clips: full screen on phones, a 9:16 column on wide screens
+   - wide clips: full screen on wide screens, a 16:9 band on phones */
+function frameRect(vw, vh, srcW, srcH) {
+  const tallScreen = vw / vh < .75;
+  if (srcH > srcW) {
+    if (tallScreen) return { x: 0, y: 0, w: vw, h: vh };
+    const w = Math.round(vh * srcW / srcH);
+    return { x: Math.round((vw - w) / 2), y: 0, w, h: vh };
+  }
+  if (!tallScreen) return { x: 0, y: 0, w: vw, h: vh };
+  const h = Math.round(vw * srcH / srcW * 1.25);   // a little taller than 16:9, cropped at the sides
+  return { x: 0, y: Math.round(vh * .38 - h / 2), w: vw, h };
+}
+
+function setupSection(section) {
   const stage = $('.pr-stage', section);
   const canvas = $('canvas', stage);
   const ctx = canvas.getContext('2d');
@@ -30,22 +57,18 @@ if (section) {
   const bottom = $('.bt', section);
   const caption = $('.pr-cap', section);
   const list = $('.pr-shots', section);
-  const items = [...section.querySelectorAll('.pr-shots button')];
-  const soundBtn = $('#prSound');
+  const items = $$('.pr-shots button', section);
+  const now = $('.pr-now', section);
+  const soundBtn = $('.pr-sound', section);
 
-  const SRC_W = 720, SRC_H = 1280;          // each half of the clip
-  const SLANT = .2;                          // seam lean, as a share of frame height
-  const SHOTS = [0, 2.417, 4.625, 6.333, 7.333];
-  const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SRC_W = +section.dataset.w, SRC_H = +section.dataset.h;
+  const SHOTS = section.dataset.shots.split(',').map(Number);
 
-  let seam = 1.1;            // 0 = all final, 1 = all previs (share of frame width)
-  let target = 1.1;
-  let pointerSeam = null;    // set while the visitor is steering the seam
-  let frame = { x: 0, y: 0, w: 0, h: 0 };
-  let visible = false;
-  let loaded = false;
+  const s = {
+    section, video, visible: false, loaded: false,
+    seam: 1.1, pointerSeam: null, frame: { x: 0, y: 0, w: 0, h: 0 },
+  };
 
-  /* Size the canvas to the screen (capped pixel ratio keeps it light) */
   function resize() {
     const dpr = Math.min(devicePixelRatio || 1, 1.5);
     canvas.width = Math.round(innerWidth * dpr);
@@ -55,30 +78,22 @@ if (section) {
   resize();
   addEventListener('resize', resize, { passive: true });
 
-  /* Where the film sits: full screen on tall screens, a 9:16 column on wide ones */
-  function frameRect(vw, vh) {
-    if (vw / vh < .75) return { x: 0, y: 0, w: vw, h: vh, full: true };
-    const h = vh, w = Math.round(vh * 9 / 16);
-    return { x: Math.round((vw - w) / 2), y: 0, w, h, full: false };
-  }
-
   /* Draw one half of the clip into the frame, cover-fit */
   function drawHalf(half, f) {
-    const s = Math.max(f.w / SRC_W, f.h / SRC_H);
-    const dw = SRC_W * s, dh = SRC_H * s;
+    const k = Math.max(f.w / SRC_W, f.h / SRC_H);
+    const dw = SRC_W * k, dh = SRC_H * k;
     ctx.drawImage(video, half * SRC_W, 0, SRC_W, SRC_H, f.x + (f.w - dw) / 2, f.y + (f.h - dh) / 2, dw, dh);
   }
 
   function draw() {
-    const vw = innerWidth, vh = innerHeight;
-    ctx.clearRect(0, 0, vw, vh);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
     if (video.readyState < 2) return;
-    const f = frame;
+    const f = s.frame;
     ctx.save();
     ctx.beginPath(); ctx.rect(f.x, f.y, f.w, f.h); ctx.clip();
     drawHalf(0, f);                                         // previs underneath
     const lean = f.h * SLANT / 2;
-    const sx = f.x + f.w * seam;
+    const sx = f.x + f.w * s.seam;
     ctx.beginPath();                                        // final to the right of the seam
     ctx.moveTo(sx + lean, f.y);
     ctx.lineTo(f.x + f.w + lean * 2, f.y);
@@ -86,7 +101,7 @@ if (section) {
     ctx.lineTo(sx - lean, f.y + f.h);
     ctx.closePath();
     ctx.save(); ctx.clip(); drawHalf(1, f); ctx.restore();
-    if (seam > -.2 && seam < 1.2) {                         // the seam itself
+    if (s.seam > -.2 && s.seam < 1.2) {
       ctx.strokeStyle = 'rgba(231,227,216,.95)';
       ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(sx + lean, f.y); ctx.lineTo(sx - lean, f.y + f.h); ctx.stroke();
@@ -94,30 +109,26 @@ if (section) {
     ctx.restore();
   }
 
-  /* Labels ride along the seam */
+  /* Labels ride along the seam, about a quarter of the way down */
   function placeSeamLabels() {
-    const f = frame;
+    const f = s.frame;
     const lean = f.h * SLANT / 2;
-    const x = f.x + f.w * seam + lean * .52;                // about a quarter of the way down
+    const x = f.x + f.w * s.seam + lean * .52;
     seamEl.style.transform = `translate3d(${x}px, ${f.y + f.h * .24}px, 0)`;
-    seamEl.style.opacity = seam > .02 && seam < .98 ? 1 : 0;
-    // Drop a label once its side is too narrow to hold it
-    tagL.style.opacity = seam > .3 ? 1 : 0;
-    tagR.style.opacity = seam < .7 ? 1 : 0;
+    seamEl.style.opacity = s.seam > .02 && s.seam < .98 ? 1 : 0;
+    tagL.style.opacity = s.seam > .3 ? 1 : 0;
+    tagR.style.opacity = s.seam < .7 ? 1 : 0;
   }
 
   /* Visitor steering: hover on desktop, horizontal drag on touch */
-  const fine = matchMedia('(hover: hover) and (pointer: fine)');
-  const toSeam = e => clamp((e.clientX - frame.x) / frame.w, 0, 1);
+  const toSeam = e => clamp((e.clientX - s.frame.x) / s.frame.w, 0, 1);
+  const live = () => section.classList.contains('live');
   stage.addEventListener('pointermove', e => {
-    if (!section.classList.contains('live')) return;
-    if (fine.matches || e.pressure > 0) pointerSeam = toSeam(e);
+    if (live() && (fine.matches || e.pressure > 0)) s.pointerSeam = toSeam(e);
   });
-  stage.addEventListener('pointerdown', e => {
-    if (section.classList.contains('live')) pointerSeam = toSeam(e);
-  });
-  stage.addEventListener('pointerleave', () => { if (fine.matches) pointerSeam = null; });
-  stage.addEventListener('pointercancel', () => { pointerSeam = null; });
+  stage.addEventListener('pointerdown', e => { if (live()) s.pointerSeam = toSeam(e); });
+  stage.addEventListener('pointerleave', () => { if (fine.matches) s.pointerSeam = null; });
+  stage.addEventListener('pointercancel', () => { s.pointerSeam = null; });
 
   /* Shot list: shows where you are, click to jump */
   items.forEach((btn, i) => btn.addEventListener('click', () => {
@@ -129,39 +140,45 @@ if (section) {
     let i = 0;
     while (i < SHOTS.length - 1 && t >= SHOTS[i + 1]) i++;
     items.forEach((b, k) => b.classList.toggle('on', k === i));
-    $('#prShot').textContent = items[i]?.dataset.name || '';
+    if (items[i] && now.textContent !== items[i].textContent) now.textContent = items[i].textContent;
   }
 
+  /* Sound: one section at a time */
+  s.mute = () => {
+    video.muted = true;
+    soundBtn.textContent = 'SOUND ON';
+    soundBtn.setAttribute('aria-pressed', 'false');
+  };
   soundBtn.addEventListener('click', () => {
-    video.muted = !video.muted;
-    if (!video.muted) video.play().catch(() => {});
-    soundBtn.textContent = video.muted ? 'SOUND ON' : 'SOUND OFF';
-    soundBtn.setAttribute('aria-pressed', String(!video.muted));
+    if (video.muted) {
+      sections.forEach(o => o !== s && o.mute());
+      video.muted = false;
+      video.play().catch(() => {});
+      soundBtn.textContent = 'SOUND OFF';
+      soundBtn.setAttribute('aria-pressed', 'true');
+    } else s.mute();
   });
 
   /* Load and play only near the screen */
   new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting;
-    if (visible) {
-      if (!loaded) { video.src = video.dataset.src; loaded = true; }
-      if (!document.querySelector('#theater')?.open) video.play().catch(() => {});
+    s.visible = entry.isIntersecting;
+    if (s.visible) {
+      if (!s.loaded) { video.src = video.dataset.src; s.loaded = true; }
+      video.play().catch(() => {});
     } else {
       video.pause();
-      if (!video.muted) { video.muted = true; soundBtn.textContent = 'SOUND ON'; soundBtn.setAttribute('aria-pressed', 'false'); }
+      s.mute();
     }
   }, { rootMargin: '40% 0px' }).observe(section);
 
-  document.querySelector('#theater')?.addEventListener('close', () => { if (visible) video.play().catch(() => {}); });
-  document.querySelector('#theater')?.addEventListener('toggle', e => { if (e.newState === 'open') video.pause(); });
-
   /* Scroll timeline */
-  function update(now) {
+  s.update = t => {
     const r = section.getBoundingClientRect();
     const vw = innerWidth, vh = innerHeight;
     if (r.bottom < 0 || r.top > vh) return;
 
     const p = clamp(-r.top / (r.height - vh));
-    const idle = REDUCED ? 0 : (Math.sin(now / 700) * .5 + .5) * .012;
+    const idle = REDUCED ? 0 : (Math.sin(t / 700) * .5 + .5) * .012;
     const e1 = ease(clamp((p - .03) / .26));   // title splits
     const e2 = ease(clamp((p - .22) / .26));   // slit opens to the frame
     const e4 = ease(clamp((p - .46) / .28));   // seam sweeps in
@@ -174,21 +191,22 @@ if (section) {
     kicker.style.opacity = hint.style.opacity = 1 - e1 * 2;
 
     // Slit: from the title out to the film frame
-    frame = frameRect(vw, vh);
+    s.frame = frameRect(vw, vh, SRC_W, SRC_H);
+    const f = s.frame;
     const box = ttl.getBoundingClientRect();
     const cx = box.left + box.width / 2, cy = box.top + box.height / 2;
-    const L = lerp(cx - box.width / 2, frame.x, e2);
-    const R = lerp(cx + box.width / 2, frame.x + frame.w, e2);
-    const T = lerp(cy - gap * .92, frame.y, e2);
-    const B = lerp(cy + gap * .92, frame.y + frame.h, e2);
+    const L = lerp(cx - box.width / 2, f.x, e2);
+    const R = lerp(cx + box.width / 2, f.x + f.w, e2);
+    const T = lerp(cy - gap * .92, f.y, e2);
+    const B = lerp(cy + gap * .92, f.y + f.h, e2);
     stage.style.clipPath = `inset(${T}px ${vw - R}px ${vh - B}px ${L}px round ${lerp(6, 0, e2)}px)`;
 
     // Seam: scroll drives it in, then the visitor can take over
-    const live = e4 > .98;
-    section.classList.toggle('live', live);
-    if (!live) pointerSeam = null;
-    target = pointerSeam ?? lerp(1.12, .5, e4);
-    seam = lerp(seam, target, pointerSeam === null ? .25 : .22);
+    const isLive = e4 > .98;
+    section.classList.toggle('live', isLive);
+    if (!isLive) s.pointerSeam = null;
+    const target = s.pointerSeam ?? lerp(1.12, .5, e4);
+    s.seam = lerp(s.seam, target, s.pointerSeam === null ? .25 : .22);
 
     caption.style.opacity = list.style.opacity = e3;
     caption.style.transform = `translateY(${(1 - e3) * 30}px)`;
@@ -197,10 +215,37 @@ if (section) {
     draw();
     placeSeamLabels();
     markShot();
-  }
+  };
 
-  (function loop(now) {
-    if (visible) update(now);
-    requestAnimationFrame(loop);
-  })(performance.now());
+  return s;
 }
+
+
+/* Title fitting: each title fills ~90% of the width (same rule as the home page) */
+function fitTitles() {
+  $$('.process .ttl').forEach(ttl => {
+    ttl.style.fontSize = '100px';
+    const size = Math.min(260, 100 * innerWidth * .9 / ttl.scrollWidth);
+    ttl.style.fontSize = size + 'px';
+    ttl.closest('.stick').style.setProperty('--th', size * .9 + 'px');
+  });
+}
+
+const sections = $$('.process').map(setupSection);
+
+fitTitles();
+document.fonts?.ready.then(fitTitles);
+addEventListener('resize', fitTitles, { passive: true });
+startGrain();
+
+document.addEventListener('visibilitychange', () => {
+  sections.forEach(s => {
+    if (document.hidden) s.video.pause();
+    else if (s.visible) s.video.play().catch(() => {});
+  });
+});
+
+(function loop(t) {
+  sections.forEach(s => s.visible && s.update(t));
+  requestAnimationFrame(loop);
+})(performance.now());

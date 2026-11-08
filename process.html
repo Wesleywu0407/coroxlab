@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Process · COROX Films</title>
+  <meta name="description" content="How a COROX film is made: every shot starts as a Blender previs. Drag the line to see what each one became.">
+  <meta name="color-scheme" content="dark">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script type="module" src="js/process.js"></script>
+</head>
+<body class="process-page">
+  <div id="grain" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="top">
+    <a href="./"><img src="media/logo.png" alt="COROX"></a>
+    <nav>
+      <a href="./#act-001">FILMS</a>
+      <a href="process.html" aria-current="page">PROCESS</a>
+      <a href="film-index.html">INDEX</a>
+    </nav>
+  </header>
+
+  <!--
+    Each section is one film. Its clip holds the previs on the left half and the
+    final on the right half. data-w / data-h = size of ONE half; data-shots = shot
+    start times in seconds (one per button in .pr-shots).
+  -->
+  <main id="process">
+
+    <section class="process" id="night-ride" aria-label="Night Ride: previs to film"
+             data-w="720" data-h="1280" data-shots="0,2.417,4.625,6.333,7.333">
+      <div class="stick">
+        <div class="pr-stage">
+          <canvas aria-hidden="true"></canvas>
+          <div class="pr-seam" aria-hidden="true">
+            <span class="pr-tag pr-tag-l">BLENDER PREVIS</span>
+            <span class="pr-tag pr-tag-r">FINAL FILM</span>
+          </div>
+        </div>
+        <p class="kicker">Process 01 · How a COROX film is made</p>
+        <div class="ttl">
+          <h2 class="tp">Night Ride</h2>
+          <h2 class="bt" aria-hidden="true">Night Ride</h2>
+        </div>
+        <div class="hint">SCROLL <span>↓</span></div>
+
+        <div class="pr-cap">
+          <div class="meta">File 002 · Night Ride · <span class="pr-now">POV</span></div>
+          <h3>Block it.<br>Then make it real.</h3>
+          <p>Every shot starts as grey boxes in Blender: where the camera sits, how low, how fast. Drag the line to see what each one became.</p>
+          <button class="btn btn-ghost pr-sound" aria-pressed="false">SOUND ON</button>
+        </div>
+
+        <ol class="pr-shots" aria-label="Shots">
+          <li><button>POV</button></li>
+          <li><button>Low chase</button></li>
+          <li><button>Level with the train</button></li>
+          <li><button>The driver</button></li>
+          <li><button>Overtake</button></li>
+        </ol>
+      </div>
+      <video class="pr-src" data-src="media/process/night-ride-previs-final.mp4" muted loop playsinline preload="none"></video>
+    </section>
+
+    <section class="process" id="bass-gravity" aria-label="Bass Gravity: previs to film"
+             data-w="720" data-h="1280" data-shots="0,3,4.583,8.542,12.125">
+      <div class="stick">
+        <div class="pr-stage">
+          <canvas aria-hidden="true"></canvas>
+          <div class="pr-seam" aria-hidden="true">
+            <span class="pr-tag pr-tag-l">BLENDER PREVIS</span>
+            <span class="pr-tag pr-tag-r">FINAL FILM</span>
+          </div>
+        </div>
+        <p class="kicker">Process 02 · The 24-hour store</p>
+        <div class="ttl">
+          <h2 class="tp">Bass Gravity</h2>
+          <h2 class="bt" aria-hidden="true">Bass Gravity</h2>
+        </div>
+        <div class="hint">SCROLL <span>↓</span></div>
+
+        <div class="pr-cap">
+          <div class="meta">File 003 · Bass Gravity · <span class="pr-now">Kick the sign</span></div>
+          <h3>Timed to<br>the drop.</h3>
+          <p>A white rabbit in a white store. Every kick, thump and float was placed on the beat in Blender before the store got its colour.</p>
+          <button class="btn btn-ghost pr-sound" aria-pressed="false">SOUND ON</button>
+        </div>
+
+        <ol class="pr-shots" aria-label="Shots">
+          <li><button>Kick the sign</button></li>
+          <li><button>Thump</button></li>
+          <li><button>Surf</button></li>
+          <li><button>Zero gravity</button></li>
+          <li><button>Soda rocket</button></li>
+        </ol>
+      </div>
+      <video class="pr-src" data-src="media/process/bass-gravity-previs-final.mp4" muted loop playsinline preload="none"></video>
+    </section>
+
+    <section class="process pr-wide" id="star-keeper" aria-label="The Star Keeper: previs to film"
+             data-w="1280" data-h="720" data-shots="0,2,5.792,7.667,10.792,12.708">
+      <div class="stick">
+        <div class="pr-stage">
+          <canvas aria-hidden="true"></canvas>
+          <div class="pr-seam" aria-hidden="true">
+            <span class="pr-tag pr-tag-l">BLENDER PREVIS</span>
+            <span class="pr-tag pr-tag-r">FINAL FILM</span>
+          </div>
+        </div>
+        <p class="kicker">Process 03 · Above the clouds</p>
+        <div class="ttl">
+          <h2 class="tp">The Star Keeper</h2>
+          <h2 class="bt" aria-hidden="true">The Star Keeper</h2>
+        </div>
+        <div class="hint">SCROLL <span>↓</span></div>
+
+        <div class="pr-cap">
+          <div class="meta">File 008 · The Star Keeper · <span class="pr-now">Night shift</span></div>
+          <h3>Clay first.<br>Then brass.</h3>
+          <p>A toy gecko on a toy clock set every camera move. The brass, the glass and the starlight came after.</p>
+          <button class="btn btn-ghost pr-sound" aria-pressed="false">SOUND ON</button>
+        </div>
+
+        <ol class="pr-shots" aria-label="Shots">
+          <li><button>Night shift</button></li>
+          <li><button>The pendulum</button></li>
+          <li><button>Lights out</button></li>
+          <li><button>Ride the hand</button></li>
+          <li><button>One lap</button></li>
+          <li><button>The last star</button></li>
+        </ol>
+      </div>
+      <video class="pr-src" data-src="media/process/star-keeper-previs-final.mp4" muted loop playsinline preload="none"></video>
+    </section>
+
+  </main>
+
+  <footer class="pr-end">
+    <a class="pr-next" href="./#act-001">Watch the films <span>→</span></a>
+    <p class="design-credit">Website design by <strong>Wesley</strong></p>
+    <p class="copy">© 2026 COROX</p>
+  </footer>
+</body>
+</html>
