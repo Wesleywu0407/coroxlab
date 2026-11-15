@@ -119,4 +119,22 @@ export const FILMS = [
     process: 'process.html#mountain',
     line: 'Tourists film a famous cliff off Krabi until it opens its hand.',
   },
+  {
+    id: '010',
+    title: 'Under the Roots',
+    time: 'Ice Age',
+    place: 'Edge of the woodland',
+    dur: '01:00',
+    src: 'media/films/010-under-the-roots.mp4',
+    theaterSources: [
+      ['media/films/010-under-the-roots-720.mp4', 'video/mp4; codecs="avc1.64001f"'],
+    ],
+    still: 'media/stills/010-under-the-roots.jpg',
+    stillAlt: 'A boy with bone snow goggles pushed up on his forehead holds his bare hand beside a small flame in a nest of tinder.',
+    description: 'A herd of woolly mammoths stops in a whiteout beside a fallen tree. The boy riding the lead animal slides down its leg and crawls under the roots with his last ember in a bark carrier. His first breath scatters the tinder. He pushes it back with one finger, breathes again, softer, and a flame takes.',
+    model: 'Kling 4.0',
+    production: 'Blender previs · Higgsfield',
+    process: 'process.html#under-the-roots',
+    line: 'A boy on a mammoth, a whiteout, one ember left. Under a fallen tree he tries to turn it into a fire.',
+  },
 ];

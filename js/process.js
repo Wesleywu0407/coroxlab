@@ -13,6 +13,9 @@
      data-w, data-h   size of ONE half of the clip
      data-shots       shot start times in seconds, one per
                       button in .pr-shots
+   Optional: an <ol class="pr-notes"> in the caption, one
+   <li> per shot (lens line + director's note). The note
+   for the shot on screen is shown.
    ========================================================= */
 
 import { startGrain } from './grain.js';
@@ -63,6 +66,7 @@ function setupSection(section) {
   const caption = $('.pr-cap', section);
   const list = $('.pr-shots', section);
   const items = $$('.pr-shots button', section);
+  const notes = $$('.pr-notes li', section);            // optional: one director's note per shot
   const now = $('.pr-now', section);
   const soundBtn = $('.pr-sound', section);
 
@@ -151,6 +155,7 @@ function setupSection(section) {
     let i = 0;
     while (i < SHOTS.length - 1 && t >= SHOTS[i + 1]) i++;
     items.forEach((b, k) => b.classList.toggle('on', k === i));
+    notes.forEach((n, k) => n.classList.toggle('on', k === i));
     if (items[i] && now.textContent !== items[i].textContent) now.textContent = items[i].textContent;
   }
 

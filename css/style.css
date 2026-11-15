@@ -370,6 +370,7 @@ button {
 
 #file-001 .film-frame img { object-position: center 26%; }
 #file-002 .film-frame img { object-position: center 55%; }
+#file-010 .film-frame img { object-position: center 16%; }
 
 .film-preview { position: absolute; inset: 0; opacity: 0; }
 .previewing .film-preview { opacity: 1; }
@@ -754,6 +755,36 @@ footer .copy {
   font: 400 clamp(14px, 1.2vw, 18px)/1.5 var(--display);
   color: var(--dim);
 }
+
+/* Director's notes, one per shot. All sit in one grid cell so the caption keeps its height. */
+.pr-notes {
+  display: grid;
+  margin-top: 18px;
+  max-width: 26em;
+  list-style: none;
+}
+
+.pr-notes li {
+  grid-area: 1 / 1;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity .35s, visibility .35s;
+}
+
+.pr-notes li.on {
+  visibility: visible;
+  opacity: 1;
+}
+
+.pr-notes .pr-spec {
+  display: block;
+  font: 400 11px/1.5 var(--mono);
+  letter-spacing: .14em;
+  color: var(--bone);
+  text-transform: uppercase;
+}
+
+.pr-notes p { margin-top: 8px; }
 
 .btn-ghost {
   background: transparent;

@@ -24,7 +24,7 @@ Use the HTTP address so the browser can load the modules. Refresh after editing 
 | Homepage scroll reveals and preview loading | [js/main.js](js/main.js) |
 | Film Index layout and previews | [film-index.html](film-index.html) and [js/catalog.js](js/catalog.js) |
 | Shared film player and controls | [js/player.js](js/player.js) |
-| The Process page (previs-to-film seam, one section per film) | [process.html](process.html), [js/process.js](js/process.js) and the clips in [media/process/](media/process/). Each clip is previs on the left half and the final on the right; set `data-w`/`data-h` to one half's size and `data-shots` to the shot start times |
+| The Process page (previs-to-film seam, one section per film) | [process.html](process.html), [js/process.js](js/process.js) and the clips in [media/process/](media/process/). Each clip is previs on the left half and the final on the right; set `data-w`/`data-h` to one half's size and `data-shots` to the shot start times. A section can also carry an `<ol class="pr-notes">` in its caption with one `<li>` per shot (a lens line and a director's note); the note for the shot on screen is shown |
 | Film grain (both pages) | [js/grain.js](js/grain.js) |
 | Film files or the transparent logo | [media/films/](media/films/) and [media/logo.png](media/logo.png) |
 | Production cache headers | [vercel.json](vercel.json) |
