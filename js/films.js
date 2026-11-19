@@ -136,5 +136,22 @@ export const FILMS = [
     production: 'Blender previs · Higgsfield',
     process: 'process.html#under-the-roots',
     line: 'A boy on a mammoth, a whiteout, one ember left. Under a fallen tree he tries to turn it into a fire.',
+  },  {
+    id: '011',
+    title: 'Bear Bell',
+    time: 'Dusk',
+    place: 'Mountain road in fog',
+    dur: '01:27.5',
+    src: 'media/films/011-bear-bell.mp4',
+    theaterSources: [
+      ['media/films/011-bear-bell-720.mp4', 'video/mp4; codecs="avc1.64001f"'],
+    ],
+    still: 'media/stills/011-bear-bell.jpg',
+    stillAlt: 'A hiker crouched by a guardrail holds a small brass bell and looks at a giant foot of rock and roots, hung with dozens of small bells, planted on the wet road.',
+    description: 'Two hikers coming down a mountain road in fog hear a bell far too deep to be theirs. Whatever rings it is as tall as the cedars. They hide behind a rail post with the lamp off, and a foot comes down out of the fog over them. Her bear bell slips and clinks. She rings it again, and from above the fog, something answers.',
+    model: 'MiniMax H3 Max',
+    production: 'Blender previs · Higgsfield',
+    process: 'process.html#bear-bell',
+    line: 'On a mountain road in fog, something as tall as the trees is ringing a bell. Two hikers hide and keep quiet.',
   },
 ];

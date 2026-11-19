@@ -371,6 +371,7 @@ button {
 #file-001 .film-frame img { object-position: center 26%; }
 #file-002 .film-frame img { object-position: center 55%; }
 #file-010 .film-frame img { object-position: center 16%; }
+#file-011 .film-frame img { object-position: center 33%; }
 
 .film-preview { position: absolute; inset: 0; opacity: 0; }
 .previewing .film-preview { opacity: 1; }
